@@ -1,0 +1,10 @@
+C:\Users\alex2\source\repos\KW_Shooting\KW_Shooting\obj\Debug\KW_Shooting.csproj.AssemblyReference.cache
+C:\Users\alex2\source\repos\KW_Shooting\KW_Shooting\obj\Debug\KW_Shooting.Form1.resources
+C:\Users\alex2\source\repos\KW_Shooting\KW_Shooting\obj\Debug\KW_Shooting.Properties.Resources.resources
+C:\Users\alex2\source\repos\KW_Shooting\KW_Shooting\obj\Debug\KW_Shooting.csproj.GenerateResource.cache
+C:\Users\alex2\source\repos\KW_Shooting\KW_Shooting\obj\Debug\KW_Shooting.csproj.CoreCompileInputs.cache
+C:\Users\alex2\source\repos\KW_Shooting\KW_Shooting\bin\Debug\KW_Shooting.exe.config
+C:\Users\alex2\source\repos\KW_Shooting\KW_Shooting\bin\Debug\KW_Shooting.exe
+C:\Users\alex2\source\repos\KW_Shooting\KW_Shooting\bin\Debug\KW_Shooting.pdb
+C:\Users\alex2\source\repos\KW_Shooting\KW_Shooting\obj\Debug\KW_Shooting.exe
+C:\Users\alex2\source\repos\KW_Shooting\KW_Shooting\obj\Debug\KW_Shooting.pdb
