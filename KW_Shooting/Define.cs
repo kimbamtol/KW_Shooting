@@ -1,4 +1,8 @@
-﻿namespace Numerics
+﻿using KW_Shooting;
+using System.Collections.Generic;
+using System.Windows.Forms;
+
+namespace Numerics
 {
     public struct Vec2
     {
@@ -33,4 +37,12 @@
         }
 
     };
+}
+namespace Utils
+{
+    public interface IRenderer
+    {
+        List<object> GameObjs { get; }
+
+    }
 }

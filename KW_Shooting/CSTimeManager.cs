@@ -18,16 +18,16 @@ namespace KW_Shooting
             stopwatch = new Stopwatch();
             stopwatch.Start();
         }
-        private static CSTimeManager Instance;
+        private static CSTimeManager instance;
         private static Stopwatch stopwatch;
         public static CSTimeManager GetInstance()
         {
-            if (null == Instance)
+            if (null == instance)
             {
-                Instance = new CSTimeManager();
-                return Instance;
+                instance = new CSTimeManager();
+                return instance;
             }
-            return Instance;
+            return instance;
         }
 
         public int GetDT()
