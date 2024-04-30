@@ -28,20 +28,85 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.Point = new System.Windows.Forms.Label();
+            this.Time = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.Target_Respawn = new System.Windows.Forms.Timer(this.components);
+            this.Movement = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label1.Location = new System.Drawing.Point(12, 11);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(89, 27);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Score";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label2.Location = new System.Drawing.Point(972, 11);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(77, 27);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Time";
+            // 
+            // Point
+            // 
+            this.Point.AutoSize = true;
+            this.Point.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Point.Location = new System.Drawing.Point(40, 49);
+            this.Point.Name = "Point";
+            this.Point.Size = new System.Drawing.Size(29, 27);
+            this.Point.TabIndex = 2;
+            this.Point.Text = "0";
+            // 
+            // Time
+            // 
+            this.Time.AutoSize = true;
+            this.Time.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Time.Location = new System.Drawing.Point(998, 49);
+            this.Time.Name = "Time";
+            this.Time.Size = new System.Drawing.Size(29, 27);
+            this.Time.TabIndex = 3;
+            this.Time.Text = "0";
+            // 
+            // Movement
+            // 
+            this.Movement.Tick += new System.EventHandler(this.Movement_Tick);
             // 
             // Form1
             // 
-            this.ClientSize = new System.Drawing.Size(278, 244);
+            this.ClientSize = new System.Drawing.Size(1077, 572);
+            this.Controls.Add(this.Time);
+            this.Controls.Add(this.Point);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Name = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Render);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_Update);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
+
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label Point;
+        private System.Windows.Forms.Label Time;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer Target_Respawn;
+        private System.Windows.Forms.Timer Movement;
     }
 }
 
