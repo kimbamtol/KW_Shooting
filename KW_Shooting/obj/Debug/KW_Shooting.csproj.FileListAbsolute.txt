@@ -8,3 +8,13 @@ C:\Users\alex2\source\repos\KW_Shooting\KW_Shooting\bin\Debug\KW_Shooting.exe
 C:\Users\alex2\source\repos\KW_Shooting\KW_Shooting\bin\Debug\KW_Shooting.pdb
 C:\Users\alex2\source\repos\KW_Shooting\KW_Shooting\obj\Debug\KW_Shooting.exe
 C:\Users\alex2\source\repos\KW_Shooting\KW_Shooting\obj\Debug\KW_Shooting.pdb
+C:\Users\smile\Source\Repos\KW_Shooting\KW_Shooting\bin\Debug\KW_Shooting.exe.config
+C:\Users\smile\Source\Repos\KW_Shooting\KW_Shooting\bin\Debug\KW_Shooting.exe
+C:\Users\smile\Source\Repos\KW_Shooting\KW_Shooting\bin\Debug\KW_Shooting.pdb
+C:\Users\smile\Source\Repos\KW_Shooting\KW_Shooting\obj\Debug\KW_Shooting.csproj.AssemblyReference.cache
+C:\Users\smile\Source\Repos\KW_Shooting\KW_Shooting\obj\Debug\KW_Shooting.Form1.resources
+C:\Users\smile\Source\Repos\KW_Shooting\KW_Shooting\obj\Debug\KW_Shooting.Properties.Resources.resources
+C:\Users\smile\Source\Repos\KW_Shooting\KW_Shooting\obj\Debug\KW_Shooting.csproj.GenerateResource.cache
+C:\Users\smile\Source\Repos\KW_Shooting\KW_Shooting\obj\Debug\KW_Shooting.csproj.CoreCompileInputs.cache
+C:\Users\smile\Source\Repos\KW_Shooting\KW_Shooting\obj\Debug\KW_Shooting.exe
+C:\Users\smile\Source\Repos\KW_Shooting\KW_Shooting\obj\Debug\KW_Shooting.pdb
