@@ -16,8 +16,9 @@ namespace KW_Shooting
         public CSPlayer(Vec2 pos) : base(pos)
         {
             CreatAnimator();
-            m_animator.CreateAnimation("Default", Properties.Resources.gunner, new Vec2(330, 0), new Vec2(110, 110), new Vec2(120, 0), 3, 0.2f);
-            m_animator.PlayAnimation("Default");
+            m_animator.CreateAnimation("Generate", Properties.Resources.Monster, new Vec2(80, 0), new Vec2(80, 80), new Vec2(80, 0), 5, 0.2f);
+            m_animator.CreateAnimation("Default", Properties.Resources.Monster, new Vec2(168, 86), new Vec2(80, 80), new Vec2(80, 0), 4, 0.2f);
+            m_animator.PlayAnimation("Generate");
         }
         public override void Update()
         {

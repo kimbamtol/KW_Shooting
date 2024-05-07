@@ -43,6 +43,7 @@ namespace KW_Shooting
         public void Create(Bitmap image, Vec2 start, Vec2 scale, Vec2 step, int num, float time)
         {
             m_image = image;
+           
             for (int i = 0; i < num; i++)
             {
                 m_vecFrm.Add(new AnimFrm(time, scale, start + step * i));
