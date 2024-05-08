@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Media;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -29,7 +30,7 @@ namespace KW_Shooting
             get { return objects; }
         }
 
-        CSPlayer player;
+        CSShooting gun;
 
         public Form1()
         {
@@ -42,12 +43,31 @@ namespace KW_Shooting
 
             this.DoubleBuffered = true;
 
-            player = new CSPlayer(new Vec2(200f, 200f));
-            objects.Add(player);
+            gun = new CSShooting(new Vec2(0f, 0f));
+            objects.Add(gun);
 
             CSTimeManager.GetInstance();
 
             CSRTRenderer.GetInstance().Current = this;
+            MediaPlayer.Visible = false;
+            string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string startDirectory="";
+            int count = 3;
+            for(int i = currentDirectory.Length-1;i>=0;i--)
+            {
+                if (currentDirectory[i] == '\\') 
+                {
+                    count--;
+                    if(count == 0) 
+                    {
+                        startDirectory = currentDirectory.Substring(0, i);
+                        break;
+                    }
+                }
+            }
+            MediaPlayer.URL = 
+                startDirectory + "\\Resources\\Musics\\BGM.wav";
+            MediaPlayer.settings.volume = 70;
         }
 
         public void Render(object sender,PaintEventArgs e)
@@ -57,11 +77,10 @@ namespace KW_Shooting
 
         private void Form1_Update(object sender, MouseEventArgs e)
         {
-            player.Position = new Vec2(e.X, e.Y);
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            MediaPlayer.Ctlcontrols.play();
         }
 
         /// <summary>
@@ -149,12 +168,20 @@ namespace KW_Shooting
         private void Target_Click(object sender, EventArgs e)
         {
             PictureBox clickedTarget = sender as PictureBox;
+            gun.Position = new Vec2(clickedTarget.Location.X+clickedTarget.Size.Width/2, clickedTarget.Location.Y+ clickedTarget.Size.Height / 2);
+            gun.Shoot("Shooting1");
             if (clickedTarget != null && clickedTarget.Visible)
             {
                 clickedTarget.Visible = false; // 타겟 숨기기
                 score += 10; // 점수 증가
                 Point.Text = score.ToString();
             }
+        }
+
+        private void Form1_MouseClick(object sender, MouseEventArgs e)
+        {
+            gun.Position = new Vec2(e.X, e.Y);
+            gun.Shoot("Shooting1");
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,7 +32,7 @@ namespace KW_Shooting
         private Bitmap m_image;
         private int m_currentIdx;
         private float m_time;
-
+        private int m_playTime;
         public CSAnimation()
         {
             m_animator = null;
@@ -51,33 +52,58 @@ namespace KW_Shooting
         }
         public void Render(Graphics g)
         {
+
             CSObject playObj = m_animator.Owner;
-            Vec2 objPos = playObj.Position;
-            m_currentIdx %= m_vecFrm.Count;
+            Vec2 startPos = playObj.Position - m_vecFrm[m_currentIdx].scale * 0.5f;
             RectangleF srcRect = new RectangleF(m_vecFrm[m_currentIdx].pos.x, m_vecFrm[m_currentIdx].pos.y
                 , m_vecFrm[m_currentIdx].scale.x, m_vecFrm[m_currentIdx].scale.y);
-            Vec2 startPos = objPos - m_vecFrm[m_currentIdx].scale * 0.5f;
-            g.DrawImage(m_image, startPos.x, startPos.y, srcRect, GraphicsUnit.Pixel);
+            RectangleF dstRect = new RectangleF(new PointF(startPos.x,startPos.y),new SizeF(srcRect.Width,srcRect.Height));
+            
+            //startPos = playObj.Position;
+            g.DrawImage(m_image, dstRect, srcRect, GraphicsUnit.Pixel);
+
         }
         public void Update()
         {
-            float current_time = CSTimeManager.GetInstance().GetFDT();
-            if (current_time - m_time > m_vecFrm[m_currentIdx].time)
+            if(m_animator.PlayCount != 0)
+            {
+                if (m_animator.PlayCount == m_playTime)
+                {
+                    m_animator.StopAnimation();
+                }
+            }
+
+            Action UpdateFrm = () =>
             {
                 m_currentIdx++;
-
                 m_currentIdx %= m_vecFrm.Count;
+                if (m_currentIdx == m_vecFrm.Count - 1)
+                {
+                    m_playTime++;
+                }
+            };
+
+            float current_time = CSTimeManager.GetInstance().GetFDT();
+            float elapsed_time = current_time - m_time;
+            if (elapsed_time > m_vecFrm[m_currentIdx].time)
+            {
+                UpdateFrm();
                 m_time = current_time;
             }
-            else if (current_time - m_time < 0)
+            else if (elapsed_time < 0) //out of bound
             {
-                if (current_time - m_time + 1000f > m_vecFrm[m_currentIdx].time)
+                if (elapsed_time + 1000f > m_vecFrm[m_currentIdx].time)
                 {
-                    m_currentIdx++;
-                    m_currentIdx %= m_vecFrm.Count;
+                    UpdateFrm();
                     m_time = current_time;
                 }
             }
+        }
+        public void Initialize()
+        {
+            m_currentIdx = 0;
+            m_time = 0;
+            m_playTime = 0;
         }
     }
 }

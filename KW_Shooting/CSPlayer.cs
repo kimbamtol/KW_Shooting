@@ -15,10 +15,10 @@ namespace KW_Shooting
     {
         public CSPlayer(Vec2 pos) : base(pos)
         {
-            CreatAnimator();
+            CreateAnimator();
             m_animator.CreateAnimation("Generate", Properties.Resources.Monster, new Vec2(80, 0), new Vec2(80, 80), new Vec2(80, 0), 5, 0.2f);
             m_animator.CreateAnimation("Default", Properties.Resources.Monster, new Vec2(168, 86), new Vec2(80, 80), new Vec2(80, 0), 4, 0.2f);
-            m_animator.PlayAnimation("Generate");
+            m_animator.PlayAnimation("Generate",5);
         }
         public override void Update()
         {

@@ -51,6 +51,7 @@
     <Compile Include="CSObject.cs" />
     <Compile Include="CSPlayer.cs" />
     <Compile Include="CSRTRenderer.cs" />
+    <Compile Include="CSShooting.cs" />
     <Compile Include="CSTimeManager.cs" />
     <Compile Include="Define.cs" />
     <Compile Include="Form1.cs">
@@ -92,6 +93,37 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\Monster.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\shooting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\gunEffect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Musics\GUNSHOT.WAV" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Musics\BGM.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="AxWMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>aximp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="WMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

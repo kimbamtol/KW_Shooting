@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.Point = new System.Windows.Forms.Label();
@@ -36,6 +37,8 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.Target_Respawn = new System.Windows.Forms.Timer(this.components);
             this.Movement = new System.Windows.Forms.Timer(this.components);
+            this.MediaPlayer = new AxWMPLib.AxWindowsMediaPlayer();
+            ((System.ComponentModel.ISupportInitialize)(this.MediaPlayer)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -44,7 +47,7 @@
             this.label1.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label1.Location = new System.Drawing.Point(12, 11);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(89, 27);
+            this.label1.Size = new System.Drawing.Size(134, 41);
             this.label1.TabIndex = 0;
             this.label1.Text = "Score";
             // 
@@ -54,7 +57,7 @@
             this.label2.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label2.Location = new System.Drawing.Point(972, 11);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(77, 27);
+            this.label2.Size = new System.Drawing.Size(114, 41);
             this.label2.TabIndex = 1;
             this.label2.Text = "Time";
             // 
@@ -64,7 +67,7 @@
             this.Point.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.Point.Location = new System.Drawing.Point(40, 49);
             this.Point.Name = "Point";
-            this.Point.Size = new System.Drawing.Size(29, 27);
+            this.Point.Size = new System.Drawing.Size(43, 41);
             this.Point.TabIndex = 2;
             this.Point.Text = "0";
             // 
@@ -74,7 +77,7 @@
             this.Time.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.Time.Location = new System.Drawing.Point(998, 49);
             this.Time.Name = "Time";
-            this.Time.Size = new System.Drawing.Size(29, 27);
+            this.Time.Size = new System.Drawing.Size(43, 41);
             this.Time.TabIndex = 3;
             this.Time.Text = "0";
             // 
@@ -82,9 +85,19 @@
             // 
             this.Movement.Tick += new System.EventHandler(this.Movement_Tick);
             // 
+            // MediaPlayer
+            // 
+            this.MediaPlayer.Enabled = true;
+            this.MediaPlayer.Location = new System.Drawing.Point(470, 29);
+            this.MediaPlayer.Name = "MediaPlayer";
+            this.MediaPlayer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("MediaPlayer.OcxState")));
+            this.MediaPlayer.Size = new System.Drawing.Size(75, 23);
+            this.MediaPlayer.TabIndex = 4;
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(1077, 572);
+            this.Controls.Add(this.MediaPlayer);
             this.Controls.Add(this.Time);
             this.Controls.Add(this.Point);
             this.Controls.Add(this.label2);
@@ -92,7 +105,9 @@
             this.Name = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Render);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseClick);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_Update);
+            ((System.ComponentModel.ISupportInitialize)(this.MediaPlayer)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -107,6 +122,7 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Timer Target_Respawn;
         private System.Windows.Forms.Timer Movement;
+        private AxWMPLib.AxWindowsMediaPlayer MediaPlayer;
     }
 }
 

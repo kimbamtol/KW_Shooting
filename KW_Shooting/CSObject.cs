@@ -35,8 +35,7 @@ namespace KW_Shooting
         public virtual void Update()
         {
         }
-
-        public void CreatAnimator()
+        public void CreateAnimator()
         {
             m_animator = new CSAnimator();
             m_animator.Owner = this;
