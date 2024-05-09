@@ -1,0 +1,10 @@
+C:\Users\rkdgm\source\repos\올빼미\MainGame\bin\Debug\MainGame.exe.config
+C:\Users\rkdgm\source\repos\올빼미\MainGame\bin\Debug\MainGame.exe
+C:\Users\rkdgm\source\repos\올빼미\MainGame\bin\Debug\MainGame.pdb
+C:\Users\rkdgm\source\repos\올빼미\MainGame\obj\Debug\MainGame.csproj.AssemblyReference.cache
+C:\Users\rkdgm\source\repos\올빼미\MainGame\obj\Debug\MainGame.Form1.resources
+C:\Users\rkdgm\source\repos\올빼미\MainGame\obj\Debug\MainGame.Properties.Resources.resources
+C:\Users\rkdgm\source\repos\올빼미\MainGame\obj\Debug\MainGame.csproj.GenerateResource.cache
+C:\Users\rkdgm\source\repos\올빼미\MainGame\obj\Debug\MainGame.csproj.CoreCompileInputs.cache
+C:\Users\rkdgm\source\repos\올빼미\MainGame\obj\Debug\MainGame.exe
+C:\Users\rkdgm\source\repos\올빼미\MainGame\obj\Debug\MainGame.pdb
