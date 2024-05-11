@@ -34,7 +34,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.Point = new System.Windows.Forms.Label();
             this.Time = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.CountDownTimer = new System.Windows.Forms.Timer(this.components);
             this.Target_Respawn = new System.Windows.Forms.Timer(this.components);
             this.Movement = new System.Windows.Forms.Timer(this.components);
             this.MediaPlayer = new AxWMPLib.AxWindowsMediaPlayer();
@@ -47,7 +47,7 @@
             this.label1.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label1.Location = new System.Drawing.Point(12, 11);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(134, 41);
+            this.label1.Size = new System.Drawing.Size(89, 27);
             this.label1.TabIndex = 0;
             this.label1.Text = "Score";
             // 
@@ -57,7 +57,7 @@
             this.label2.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label2.Location = new System.Drawing.Point(972, 11);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(114, 41);
+            this.label2.Size = new System.Drawing.Size(77, 27);
             this.label2.TabIndex = 1;
             this.label2.Text = "Time";
             // 
@@ -67,7 +67,7 @@
             this.Point.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.Point.Location = new System.Drawing.Point(40, 49);
             this.Point.Name = "Point";
-            this.Point.Size = new System.Drawing.Size(43, 41);
+            this.Point.Size = new System.Drawing.Size(29, 27);
             this.Point.TabIndex = 2;
             this.Point.Text = "0";
             // 
@@ -77,7 +77,7 @@
             this.Time.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.Time.Location = new System.Drawing.Point(998, 49);
             this.Time.Name = "Time";
-            this.Time.Size = new System.Drawing.Size(43, 41);
+            this.Time.Size = new System.Drawing.Size(29, 27);
             this.Time.TabIndex = 3;
             this.Time.Text = "0";
             // 
@@ -119,7 +119,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label Point;
         private System.Windows.Forms.Label Time;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer CountDownTimer;
         private System.Windows.Forms.Timer Target_Respawn;
         private System.Windows.Forms.Timer Movement;
         private AxWMPLib.AxWindowsMediaPlayer MediaPlayer;

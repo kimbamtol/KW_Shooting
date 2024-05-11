@@ -22,6 +22,7 @@ namespace KW_Shooting
         private Dictionary<PictureBox, Vector> velocities = new Dictionary<PictureBox, Vector>();
         private Random random = new Random();
         private Timer movementTimer;
+        private int RemainTime = 60;
         private int score = 0;
 
         // </summary>
@@ -38,9 +39,10 @@ namespace KW_Shooting
             InitializeComponent();
             InitializeTargets(10);
             InitializeMovementTimer();
-            Movement.Interval = 20; // 타이머 간격을 50ms로 설정
-            Movement.Tick += Movement_Tick; // 타이머 이벤트 핸들러 연결
-            Movement.Start(); // 타이머 시작
+            InitializeCountdownTimer();
+            Movement.Interval = 50; // 타이머 간격을 50ms로 설정
+            Movement.Tick += Movement_Tick; // 타이머 이벤트 핸들러
+            Movement.Start(); // 타이머 시작 !
 
             this.DoubleBuffered = true;
 
@@ -84,11 +86,6 @@ namespace KW_Shooting
             MediaPlayer.Ctlcontrols.play();
         }
 
-        /// <summary>
-        /// 김태훈
-        /// </summary>
-        /// 
-
         struct Vector
         {
             public double X, Y;
@@ -112,7 +109,7 @@ namespace KW_Shooting
                     SizeMode = PictureBoxSizeMode.StretchImage
                 };
                 target.Location = GetRandomLocation(target.Size);
-                target.Click += Target_Click; // 클릭 이벤트 핸들러 추가
+                target.Click += Target_Click; // 클릭 이벤트 핸들러
                 this.Controls.Add(target);
                 targets.Add(target);
 
@@ -130,11 +127,11 @@ namespace KW_Shooting
                     Name = $"Target2_HW{i}",
                     Size = new Size(50, 50),
                     BackColor = Color.Empty,
-                    Image = Properties.Resources.Book2, // 타겟2 이미지
+                    Image = Properties.Resources.Book2,
                     SizeMode = PictureBoxSizeMode.StretchImage
                 };
                 target2.Location = GetRandomLocation(target2.Size);
-                target2.Click += Target_Click; // 클릭 이벤트 핸들러 추가
+                target2.Click += Target_Click; // 클릭 이벤트 핸들러
                 this.Controls.Add(target2);
                 targets.Add(target2);
 
@@ -155,7 +152,7 @@ namespace KW_Shooting
         private void AdjustVelocityRandomly(PictureBox target)
         {
             Vector velocity = velocities[target];
-            velocity.X += random.NextDouble() * 0.2 - 0.1; // 속도 조정
+            velocity.X += random.NextDouble() * 0.2 - 0.1;
             velocity.Y += random.NextDouble() * 0.2 - 0.1;
             velocities[target] = velocity;
         }
@@ -177,7 +174,7 @@ namespace KW_Shooting
                     // 예상되는 새 위치 계산
                     Point newPosition = new Point(target.Location.X + (int)velocity.X, target.Location.Y + (int)velocity.Y);
 
-                    // 만약에 y축이 50이하라면, 새로운 좌표로 설정(Y축 50은 Label의 좌표)
+                    // 만약에 y축이 50이하라면, 새로운 좌표로 설정(Y축 50은 Label의 좌표. 겹치니까 클릭이 잘 안됨...)
                     if (newPosition.Y <= 50)
                     {
                         newPosition.Y = 50;
@@ -190,7 +187,7 @@ namespace KW_Shooting
 
                     target.Location = newPosition;
 
-                    // 바람 효과로 속도 랜덤 조정
+                    // 바람 효과?로 속도 랜덤 조정
                     AdjustVelocityRandomly(target);
                 }
             }
@@ -205,44 +202,44 @@ namespace KW_Shooting
             {
                 if (clickedTarget.Name.StartsWith("Target1"))
                 {
-                    // 타겟1을 클릭한 경우
-                    clickedTarget.Visible = false; // 클릭한 타겟 숨기기
-                    score += 10; // 타겟1은 10점 증가
+                    // 타겟1을 클릭시
+                    clickedTarget.Visible = false; // 클릭한 타겟 숨기기 or 새로운 효과
+                    score += 10; // 타겟1은 10점 증가, 2는 30 , 3은 .. , 교수님, 조교님은 - x 점
 
                     Point.Text = score.ToString();
 
                     // 새로운 타겟1 추가
                     PictureBox newTarget1 = new PictureBox
                     {
-                        Name = $"Target1_HW{targets.Count}", // 새로운 타겟1의 이름 설정
-                        Size = new Size(100, 100), // 새로운 타겟1의 크기 설정
+                        Name = $"Target1_HW{targets.Count}", 
+                        Size = new Size(100, 100), 
                         BackColor = Color.Empty,
-                        Image = Properties.Resources.Book1, // 새로운 타겟1의 이미지 설정
+                        Image = Properties.Resources.Book1, 
                         SizeMode = PictureBoxSizeMode.StretchImage
                     };
                     newTarget1.Location = GetRandomLocation(newTarget1.Size);
-                    newTarget1.Click += Target_Click; // 클릭 이벤트 핸들러 추가
+                    newTarget1.Click += Target_Click; // 클릭 이벤트 핸들러
                     this.Controls.Add(newTarget1);
                     targets.Add(newTarget1);
 
-                    // 초기 속도와 방향 설정
+                    // 새로 생성된 타겟1의 초기 속도와 방향 설정
                     Vector velocity = new Vector(random.NextDouble() * 2 - 1, random.NextDouble() * 2 - 1);
                     velocities[newTarget1] = velocity;
                 }
                 else if (clickedTarget.Name.StartsWith("Target2"))
                 {
                     // 타겟2를 클릭한 경우
-                    clickedTarget.Visible = false; // 클릭한 타겟 숨기기
-                    score += 30; // 타겟2는 30점 증가
+                    clickedTarget.Visible = false; // 클릭한 타겟 숨기기 faeout 효과 같은거 추가 할 수 있으면 추가
+                    score += 30;
                     Point.Text = score.ToString();
 
                     // 새로운 타겟2 추가
                     PictureBox newTarget2 = new PictureBox
                     {
-                        Name = $"Target2_HW{targets.Count}", // 새로운 타겟2의 이름 설정
-                        Size = new Size(50, 50), // 새로운 타겟2의 크기 설정
+                        Name = $"Target2_HW{targets.Count}",
+                        Size = new Size(50, 50), // 새로운 타겟2의 크기 설정 50,50은 너무 작나? 싶기도 함
                         BackColor = Color.Empty,
-                        Image = Properties.Resources.Book2, // 새로운 타겟2의 이미지 설정
+                        Image = Properties.Resources.Book2, // 새로운 타겟2의 이미지 설정 우선은.. 책 이미지로
                         SizeMode = PictureBoxSizeMode.StretchImage
                     };
                     newTarget2.Location = GetRandomLocation(newTarget2.Size);
@@ -262,6 +259,23 @@ namespace KW_Shooting
         {
             gun.Position = new Vec2(e.X, e.Y);
             gun.Shoot("Shooting1");
+        }
+        private void InitializeCountdownTimer()
+        {
+            CountDownTimer = new Timer();
+            CountDownTimer.Interval = 1000; // 1초 간격
+            CountDownTimer.Tick += CountdownTimer_Tick; // 타이머 이벤트 핸들러
+            CountDownTimer.Start();
+        }
+        private void CountdownTimer_Tick(object sender, EventArgs e)
+        {
+            RemainTime--; // 시간 감소
+            if (RemainTime <= 0)
+            {
+                CountDownTimer.Stop(); // 타이머를 멈춤
+                // 라운드 처리 코드
+            }
+            Time.Text = RemainTime.ToString(); 
         }
     }
 }
