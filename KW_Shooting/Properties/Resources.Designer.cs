@@ -82,6 +82,16 @@ namespace KW_Shooting.Properties {
         /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
+        internal static System.Drawing.Bitmap Book2 {
+            get {
+                object obj = ResourceManager.GetObject("Book2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
         internal static System.Drawing.Bitmap gunEffect {
             get {
                 object obj = ResourceManager.GetObject("gunEffect", resourceCulture);
