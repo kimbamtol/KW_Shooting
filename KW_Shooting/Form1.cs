@@ -19,7 +19,7 @@ namespace KW_Shooting
         // <summary>
         // 김태훈
         private List<PictureBox> targets = new List<PictureBox>();
-        private Dictionary<PictureBox, Vector> velocities = new Dictionary<PictureBox, Vector>();
+        private Dictionary<PictureBox, Location> velocities = new Dictionary<PictureBox, Location>();
         private Random random = new Random();
         private Timer movementTimer;
         private int RemainTime = 60;
@@ -86,11 +86,11 @@ namespace KW_Shooting
             MediaPlayer.Ctlcontrols.play();
         }
 
-        struct Vector
+        struct Location
         {
             public double X, Y;
 
-            public Vector(double x, double y)
+            public Location(double x, double y)
             {
                 X = x;
                 Y = y;
@@ -114,7 +114,7 @@ namespace KW_Shooting
                 targets.Add(target);
 
                 // 초기 속도와 방향 설정
-                Vector velocity = new Vector(random.NextDouble() * 4 - 2, random.NextDouble() * 4 - 2);
+                Location velocity = new Location(random.NextDouble() * 4 - 2, random.NextDouble() * 4 - 2);
 
                 velocities[target] = velocity;
             }
@@ -136,7 +136,7 @@ namespace KW_Shooting
                 targets.Add(target2);
 
                 // 초기 속도와 방향 설정
-                Vector velocity = new Vector(random.NextDouble() * 20 - 10, random.NextDouble() * 20 - 10);
+                Location velocity = new Location(random.NextDouble() * 20 - 10, random.NextDouble() * 20 - 10);
                 velocities[target2] = velocity;
             }
         }
@@ -151,7 +151,7 @@ namespace KW_Shooting
 
         private void AdjustVelocityRandomly(PictureBox target)
         {
-            Vector velocity = velocities[target];
+            Location velocity = velocities[target];
             velocity.X += random.NextDouble() * 0.2 - 0.1;
             velocity.Y += random.NextDouble() * 0.2 - 0.1;
             velocities[target] = velocity;
@@ -161,7 +161,7 @@ namespace KW_Shooting
         {
             int maxX = ClientSize.Width - size.Width;
             int maxY = ClientSize.Height - size.Height;
-            return new Point(random.Next(maxX), random.Next(maxY));
+            return new Point(random.Next(maxX), random.Next(maxY-80));
         }
 
         private void Movement_Tick(object sender, EventArgs e)
@@ -170,28 +170,33 @@ namespace KW_Shooting
             {
                 if (target.Visible)
                 {
-                    Vector velocity = velocities[target];
-                    // 예상되는 새 위치 계산
-                    Point newPosition = new Point(target.Location.X + (int)velocity.X, target.Location.Y + (int)velocity.Y);
+                    Location velocity = velocities[target];
+                    // 새 위치 계산
+                    Point newPosition = new Point(
+                        target.Location.X + (int)velocity.X,
+                        target.Location.Y + (int)velocity.Y
+                    );
 
-                    // 만약에 y축이 50이하라면, 새로운 좌표로 설정(Y축 50은 Label의 좌표. 겹치니까 클릭이 잘 안됨...)
-                    if (newPosition.Y <= 50)
+                    // 화면 경계에 도달하면 튕겨지도록 처리
+                    if (newPosition.X < 0 || newPosition.X > ClientSize.Width - target.Width)
                     {
-                        newPosition.Y = 50;
-                        velocities[target] = new Vector(velocity.X, -velocity.Y); // Y축 방향 반전
+                        velocity.X = -velocity.X;
                     }
-
-                    // 맵 밖으로 못나가게 설정
-                    newPosition.X = Math.Max(0, Math.Min(newPosition.X, ClientSize.Width - target.Width));
-                    newPosition.Y = Math.Max(0, Math.Min(newPosition.Y, ClientSize.Height - target.Height));
-
+                    if (newPosition.Y < 50 || newPosition.Y > ClientSize.Height - target.Height)
+                    {
+                        velocity.Y = -velocity.Y;
+                    }
                     target.Location = newPosition;
 
-                    // 바람 효과?로 속도 랜덤 조정
+                    // 속도 업데이트
+                    velocities[target] = velocity;
+
+                    // 지속적으로 타겟의 Location 변경
                     AdjustVelocityRandomly(target);
                 }
             }
         }
+
         private void Target_Click(object sender, EventArgs e)
         {
             PictureBox clickedTarget = sender as PictureBox;
@@ -223,7 +228,7 @@ namespace KW_Shooting
                     targets.Add(newTarget1);
 
                     // 새로 생성된 타겟1의 초기 속도와 방향 설정
-                    Vector velocity = new Vector(random.NextDouble() * 2 - 1, random.NextDouble() * 2 - 1);
+                    Location velocity = new Location(random.NextDouble() * 2 - 1, random.NextDouble() * 2 - 1);
                     velocities[newTarget1] = velocity;
                 }
                 else if (clickedTarget.Name.StartsWith("Target2"))
@@ -248,7 +253,7 @@ namespace KW_Shooting
                     targets.Add(newTarget2);
 
                     // 초기 속도와 방향 설정
-                    Vector velocity2 = new Vector(random.NextDouble() * 20 - 10, random.NextDouble() * 20 - 10);
+                    Location velocity2 = new Location(random.NextDouble() * 20 - 10, random.NextDouble() * 20 - 10);
                     velocities[newTarget2] = velocity2;
                 }
             }
