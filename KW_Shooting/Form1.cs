@@ -54,26 +54,26 @@ namespace KW_Shooting
             CSRTRenderer.GetInstance().Current = this;
             MediaPlayer.Visible = false;
             string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string startDirectory="";
+            string startDirectory = "";
             int count = 3;
-            for(int i = currentDirectory.Length-1;i>=0;i--)
+            for (int i = currentDirectory.Length - 1; i >= 0; i--)
             {
-                if (currentDirectory[i] == '\\') 
+                if (currentDirectory[i] == '\\')
                 {
                     count--;
-                    if(count == 0) 
+                    if (count == 0)
                     {
                         startDirectory = currentDirectory.Substring(0, i);
                         break;
                     }
                 }
             }
-            MediaPlayer.URL = 
+            MediaPlayer.URL =
                 startDirectory + "\\Resources\\Musics\\BGM.wav";
             MediaPlayer.settings.volume = 70;
         }
 
-        public void Render(object sender,PaintEventArgs e)
+        public void Render(object sender, PaintEventArgs e)
         {
             CSRTRenderer.GetInstance().Form_Paint(sender, e);
         }
@@ -161,7 +161,7 @@ namespace KW_Shooting
         {
             int maxX = ClientSize.Width - size.Width;
             int maxY = ClientSize.Height - size.Height;
-            return new Point(random.Next(maxX), random.Next(maxY-80));
+            return new Point(random.Next(maxX), random.Next(maxY - 80));
         }
 
         private void Movement_Tick(object sender, EventArgs e)
@@ -216,10 +216,10 @@ namespace KW_Shooting
                     // 새로운 타겟1 추가
                     PictureBox newTarget1 = new PictureBox
                     {
-                        Name = $"Target1_HW{targets.Count}", 
-                        Size = new Size(100, 100), 
+                        Name = $"Target1_HW{targets.Count}",
+                        Size = new Size(100, 100),
                         BackColor = Color.Empty,
-                        Image = Properties.Resources.Book1, 
+                        Image = Properties.Resources.Book1,
                         SizeMode = PictureBoxSizeMode.StretchImage
                     };
                     newTarget1.Location = GetRandomLocation(newTarget1.Size);
@@ -280,7 +280,72 @@ namespace KW_Shooting
                 CountDownTimer.Stop(); // 타이머를 멈춤
                 // 라운드 처리 코드
             }
-            Time.Text = RemainTime.ToString(); 
+            Time.Text = RemainTime.ToString();
+        }
+
+        //키 입력 이벤트 핸들러 함수 (스킬관련 ㅇㅇ/ 우선은 Q 입력시 발동)
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Q && Skill_Left_Time.Text == "0")
+            {
+                ActivateSkill();
+            }
+        }
+        // 스킬 발동 메서드
+        private void ActivateSkill()
+        {
+            // Q 키를 눌렀을 때의 동작 추가
+            int clickRadius = 200; // 클릭 반경 . 우선은 200 나중에 100*x(스킬 레벨업으로 설정)
+
+            // 마우스 클릭 위치
+            Point clickPosition = Cursor.Position;
+            clickPosition = PointToClient(clickPosition);
+
+            // 주변에 있는 타겟을 감지하고 클릭한 것으로 처리
+            // 클릭시 스킬 범위내에 있는 타겟들 감지하고, 클릭한 것으로 처리
+            for (int i = 0; i < targets.Count; i++)
+            {
+                var target = targets[i];
+                Point targetCenter = new Point(target.Location.X + target.Width / 2, target.Location.Y + target.Height / 2);
+                double distance = DistanceBetweenPoints(clickPosition, targetCenter);
+
+                if (distance <= clickRadius && target.Visible)
+                {
+                    // 타겟이 클릭 반경 내에 있고 보이는 상태인 경우 클릭 처리
+                    Target_Click(target, EventArgs.Empty);
+                }
+            }
+            // 스킬 쿨타임 타이머 시작
+            Skill_Timer.Start();
+            Skill_Left_Time.Text = "5"; //
+
+            // 스킬 쿨타임이 끝나면 스킬을 다시 발동할 수 있도록 처리
+            Skill_Timer.Tick += (sender, e) =>
+            {
+                // 스킬 쿨타임 감소
+                int remainingTime = int.Parse(Skill_Left_Time.Text);
+                remainingTime--;
+
+                // 스킬 쿨타임 끝
+                if (remainingTime <= 0)
+                {
+                    Skill_Timer.Stop(); 
+                    Skill_Left_Time.Text = "0";
+                }
+                else// 스킬 쿨타임 갱신
+                {
+                    Skill_Left_Time.Text = remainingTime.ToString();
+                }
+            };
+
+        }
+
+        // 두 점 사이의 거리 계산 메서드
+        private double DistanceBetweenPoints(Point point1, Point point2)
+        {
+            int dx = point2.X - point1.X;
+            int dy = point2.Y - point1.Y;
+            return Math.Sqrt(dx * dx + dy * dy);
         }
     }
 }
