@@ -38,6 +38,9 @@
             this.Target_Respawn = new System.Windows.Forms.Timer(this.components);
             this.Movement = new System.Windows.Forms.Timer(this.components);
             this.MediaPlayer = new AxWMPLib.AxWindowsMediaPlayer();
+            this.Skill_Left_Time = new System.Windows.Forms.Label();
+            this.Label4 = new System.Windows.Forms.Label();
+            this.Skill_Timer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.MediaPlayer)).BeginInit();
             this.SuspendLayout();
             // 
@@ -94,9 +97,35 @@
             this.MediaPlayer.Size = new System.Drawing.Size(75, 23);
             this.MediaPlayer.TabIndex = 4;
             // 
+            // Skill_Left_Time
+            // 
+            this.Skill_Left_Time.AutoSize = true;
+            this.Skill_Left_Time.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Skill_Left_Time.Location = new System.Drawing.Point(40, 536);
+            this.Skill_Left_Time.Name = "Skill_Left_Time";
+            this.Skill_Left_Time.Size = new System.Drawing.Size(29, 27);
+            this.Skill_Left_Time.TabIndex = 5;
+            this.Skill_Left_Time.Text = "0";
+            // 
+            // Label4
+            // 
+            this.Label4.AutoSize = true;
+            this.Label4.Font = new System.Drawing.Font("굴림", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Label4.Location = new System.Drawing.Point(22, 499);
+            this.Label4.Name = "Label4";
+            this.Label4.Size = new System.Drawing.Size(67, 27);
+            this.Label4.TabIndex = 6;
+            this.Label4.Text = "Skill";
+            // 
+            // Skill_Timer
+            // 
+            this.Skill_Timer.Interval = 1000;
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(1077, 572);
+            this.Controls.Add(this.Label4);
+            this.Controls.Add(this.Skill_Left_Time);
             this.Controls.Add(this.MediaPlayer);
             this.Controls.Add(this.Time);
             this.Controls.Add(this.Point);
@@ -105,6 +134,7 @@
             this.Name = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Render);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseClick);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_Update);
             ((System.ComponentModel.ISupportInitialize)(this.MediaPlayer)).EndInit();
@@ -123,6 +153,9 @@
         private System.Windows.Forms.Timer Target_Respawn;
         private System.Windows.Forms.Timer Movement;
         private AxWMPLib.AxWindowsMediaPlayer MediaPlayer;
+        private System.Windows.Forms.Label Skill_Left_Time;
+        private System.Windows.Forms.Label Label4;
+        private System.Windows.Forms.Timer Skill_Timer;
     }
 }
 

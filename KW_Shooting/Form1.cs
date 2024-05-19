@@ -11,13 +11,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Numerics; //사용자 자료형
 using Utils; //사용자 인터페이스
+
 namespace KW_Shooting
 {
     public partial class Form1 : Form, IRenderer
     {
-
-        // <summary>
-        // 김태훈
         private List<PictureBox> targets = new List<PictureBox>();
         private Dictionary<PictureBox, Location> velocities = new Dictionary<PictureBox, Location>();
         private Random random = new Random();
@@ -25,7 +23,8 @@ namespace KW_Shooting
         private int RemainTime = 60;
         private int score = 0;
 
-        // </summary>
+        // <summary>
+        // 김태훈
         List<object> objects = new List<object>();
         public List<object> GameObjs
         {
@@ -40,6 +39,7 @@ namespace KW_Shooting
             InitializeTargets(10);
             InitializeMovementTimer();
             InitializeCountdownTimer();
+            InitializeSkillTimer();
             Movement.Interval = 50; // 타이머 간격을 50ms로 설정
             Movement.Tick += Movement_Tick; // 타이머 이벤트 핸들러
             Movement.Start(); // 타이머 시작 !
@@ -71,6 +71,8 @@ namespace KW_Shooting
             MediaPlayer.URL =
                 startDirectory + "\\Resources\\Musics\\BGM.wav";
             MediaPlayer.settings.volume = 70;
+
+            this.KeyDown += new KeyEventHandler(Form1_KeyDown); // 키 이벤트 핸들러 추가
         }
 
         public void Render(object sender, PaintEventArgs e)
@@ -259,12 +261,12 @@ namespace KW_Shooting
             }
         }
 
-
         private void Form1_MouseClick(object sender, MouseEventArgs e)
         {
             gun.Position = new Vec2(e.X, e.Y);
             gun.Shoot("Shooting1");
         }
+
         private void InitializeCountdownTimer()
         {
             CountDownTimer = new Timer();
@@ -272,6 +274,7 @@ namespace KW_Shooting
             CountDownTimer.Tick += CountdownTimer_Tick; // 타이머 이벤트 핸들러
             CountDownTimer.Start();
         }
+
         private void CountdownTimer_Tick(object sender, EventArgs e)
         {
             RemainTime--; // 시간 감소
@@ -283,18 +286,43 @@ namespace KW_Shooting
             Time.Text = RemainTime.ToString();
         }
 
-        //키 입력 이벤트 핸들러 함수 (스킬관련 ㅇㅇ/ 우선은 Q 입력시 발동)
+        private void InitializeSkillTimer()
+        {
+            Skill_Timer = new Timer();
+            Skill_Timer.Interval = 1000; 
+            Skill_Timer.Tick += SkillTimer_Tick;
+        }
+
+        private void SkillTimer_Tick(object sender, EventArgs e)
+        {
+            int remainingTime = int.Parse(Skill_Left_Time.Text);
+            remainingTime--;
+
+            if (remainingTime <= 0)
+            {
+                Skill_Timer.Stop();
+                Skill_Left_Time.Text = "0"; 
+            }
+            else
+            {
+                Skill_Left_Time.Text = remainingTime.ToString();
+            }
+        }
+
+        // Q 키를 눌렀을 때의 이벤트 핸들러
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Q && Skill_Left_Time.Text == "0")
             {
+                // Q 키를 눌렀을 때의 동작 추가
+                // 스킬 발동
                 ActivateSkill();
             }
         }
+
         // 스킬 발동 메서드
         private void ActivateSkill()
         {
-            // Q 키를 눌렀을 때의 동작 추가
             int clickRadius = 200; // 클릭 반경 . 우선은 200 나중에 100*x(스킬 레벨업으로 설정)
 
             // 마우스 클릭 위치
@@ -302,7 +330,6 @@ namespace KW_Shooting
             clickPosition = PointToClient(clickPosition);
 
             // 주변에 있는 타겟을 감지하고 클릭한 것으로 처리
-            // 클릭시 스킬 범위내에 있는 타겟들 감지하고, 클릭한 것으로 처리
             for (int i = 0; i < targets.Count; i++)
             {
                 var target = targets[i];
@@ -314,33 +341,15 @@ namespace KW_Shooting
                     // 타겟이 클릭 반경 내에 있고 보이는 상태인 경우 클릭 처리
                     Target_Click(target, EventArgs.Empty);
                 }
+                //큰 이펙트 하나 추가가 되면 좋을 듯
             }
+
             // 스킬 쿨타임 타이머 시작
             Skill_Timer.Start();
-            Skill_Left_Time.Text = "5"; //
-
-            // 스킬 쿨타임이 끝나면 스킬을 다시 발동할 수 있도록 처리
-            Skill_Timer.Tick += (sender, e) =>
-            {
-                // 스킬 쿨타임 감소
-                int remainingTime = int.Parse(Skill_Left_Time.Text);
-                remainingTime--;
-
-                // 스킬 쿨타임 끝
-                if (remainingTime <= 0)
-                {
-                    Skill_Timer.Stop(); 
-                    Skill_Left_Time.Text = "0";
-                }
-                else// 스킬 쿨타임 갱신
-                {
-                    Skill_Left_Time.Text = remainingTime.ToString();
-                }
-            };
-
+            Skill_Left_Time.Text = "5"; // 스킬 쿨타임 초기화 (5초)
         }
 
-        // 두 점 사이의 거리 계산 메서드
+        // 두 점 사이의 거리 계산
         private double DistanceBetweenPoints(Point point1, Point point2)
         {
             int dx = point2.X - point1.X;
