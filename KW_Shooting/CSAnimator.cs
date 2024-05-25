@@ -73,11 +73,19 @@ namespace KW_Shooting
             m_curAnim.Initialize();
             m_curAnim = null;
         }
-        public void Render(Graphics g)
+        public void Render(Graphics g, params Vec2[] optional)
         {
             if (m_curAnim != null)
             {
-                m_curAnim.Render(g);
+                try
+                {
+                    m_curAnim.Render(g,optional);
+                }
+                catch(Exception e) 
+                {
+                    Console.WriteLine(e.ToString());
+                } 
+                
             }
         }
         public void Update()

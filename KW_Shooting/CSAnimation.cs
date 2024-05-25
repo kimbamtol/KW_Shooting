@@ -50,16 +50,28 @@ namespace KW_Shooting
                 m_vecFrm.Add(new AnimFrm(time, scale, start + step * i));
             }
         }
-        public void Render(Graphics g)
+        public void Render(Graphics g,params Vec2[] optional)
         {
-
+            if(optional.Length >1)
+            {
+                throw new Exception("argument error!");
+            }
+            
             CSObject playObj = m_animator.Owner;
             Vec2 startPos = playObj.Position - m_vecFrm[m_currentIdx].scale * 0.5f;
             RectangleF srcRect = new RectangleF(m_vecFrm[m_currentIdx].pos.x, m_vecFrm[m_currentIdx].pos.y
                 , m_vecFrm[m_currentIdx].scale.x, m_vecFrm[m_currentIdx].scale.y);
-            RectangleF dstRect = new RectangleF(new PointF(startPos.x,startPos.y),new SizeF(srcRect.Width,srcRect.Height));
-            
-            //startPos = playObj.Position;
+            RectangleF dstRect;
+            if (optional.Length == 0)
+            {
+                dstRect = new RectangleF(new PointF(startPos.x, startPos.y), new SizeF(srcRect.Width, srcRect.Height));
+            }
+            else
+            {
+                Vec2 definedscale = optional[0];
+                dstRect = new RectangleF(new PointF(startPos.x, startPos.y), new SizeF(definedscale.x, definedscale.y));
+            }
+
             g.DrawImage(m_image, dstRect, srcRect, GraphicsUnit.Pixel);
 
         }

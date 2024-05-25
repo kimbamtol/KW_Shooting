@@ -41,11 +41,20 @@ namespace KW_Shooting
             m_animator.Owner = this;
         }
 
-        public void ComponentRender(Graphics g)
+        public void ComponentRender(Graphics g, params Vec2[] optional)
         {
+
             if (null != m_animator)
             {
-                m_animator.Render(g);
+                try
+                {
+                    m_animator.Render(g, optional);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+
             }
         }
     }

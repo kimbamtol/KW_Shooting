@@ -48,8 +48,8 @@
   <ItemGroup>
     <Compile Include="CSAnimation.cs" />
     <Compile Include="CSAnimator.cs" />
+    <Compile Include="CSBG.cs" />
     <Compile Include="CSObject.cs" />
-    <Compile Include="CSPlayer.cs" />
     <Compile Include="CSRTRenderer.cs" />
     <Compile Include="CSShooting.cs" />
     <Compile Include="CSTimeManager.cs" />
@@ -124,6 +124,9 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\background1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

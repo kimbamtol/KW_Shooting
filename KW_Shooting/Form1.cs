@@ -32,6 +32,7 @@ namespace KW_Shooting
         }
 
         CSShooting gun;
+        CSBG backgroundImg;
 
         public Form1()
         {
@@ -47,6 +48,8 @@ namespace KW_Shooting
             this.DoubleBuffered = true;
 
             gun = new CSShooting(new Vec2(0f, 0f));
+            backgroundImg = new CSBG(new Vec2(0, 0), new Vec2(this.Width, this.Height));
+            objects.Add(backgroundImg);
             objects.Add(gun);
 
             CSTimeManager.GetInstance();

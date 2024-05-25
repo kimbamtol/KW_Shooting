@@ -39,8 +39,7 @@ namespace KW_Shooting
 
         public void Shoot(string name)
         {
-            Thread SoundThread = new Thread(()=> GunShot.Play());
-            SoundThread.Start();
+            GunShot.Play();
             m_animator.PlayAnimation(name, 1);
         }
     }
