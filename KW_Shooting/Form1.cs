@@ -109,7 +109,7 @@ namespace KW_Shooting
                 {
                     Name = $"Target1_HW{i}",
                     Size = new Size(100, 100),
-                    BackColor = Color.Empty,
+                    BackColor = Color.Transparent,
                     Image = Properties.Resources.Book1,
                     SizeMode = PictureBoxSizeMode.StretchImage
                 };
@@ -131,7 +131,7 @@ namespace KW_Shooting
                 {
                     Name = $"Target2_HW{i}",
                     Size = new Size(50, 50),
-                    BackColor = Color.Empty,
+                    BackColor = Color.Transparent,
                     Image = Properties.Resources.Book2,
                     SizeMode = PictureBoxSizeMode.StretchImage
                 };
@@ -223,7 +223,7 @@ namespace KW_Shooting
                     {
                         Name = $"Target1_HW{targets.Count}",
                         Size = new Size(100, 100),
-                        BackColor = Color.Empty,
+                        BackColor = Color.Transparent,
                         Image = Properties.Resources.Book1,
                         SizeMode = PictureBoxSizeMode.StretchImage
                     };
@@ -248,7 +248,7 @@ namespace KW_Shooting
                     {
                         Name = $"Target2_HW{targets.Count}",
                         Size = new Size(50, 50), // 새로운 타겟2의 크기 설정 50,50은 너무 작나? 싶기도 함
-                        BackColor = Color.Empty,
+                        BackColor = Color.Transparent,
                         Image = Properties.Resources.Book2, // 새로운 타겟2의 이미지 설정 우선은.. 책 이미지로
                         SizeMode = PictureBoxSizeMode.StretchImage
                     };
