@@ -20,9 +20,15 @@ namespace KW_Shooting
         private Dictionary<PictureBox, Location> velocities = new Dictionary<PictureBox, Location>();
         private Random random = new Random();
         private Timer movementTimer;
-        private int RemainTime = 60;
+        private int RemainTime = 30;
         private int score = 0;
 
+
+        private int lives = 5;
+        private PictureBox[] lifeIndicators;
+
+        //라운드 변수
+        private int Round = 1;
         // <summary>
         // 김태훈
         List<object> objects = new List<object>();
@@ -76,15 +82,12 @@ namespace KW_Shooting
             MediaPlayer.settings.volume = 70;
 
             this.KeyDown += new KeyEventHandler(Form1_KeyDown); // 키 이벤트 핸들러 추가
+            this.MouseMove += new MouseEventHandler(Mouse_Move); // 마우스 옆에 스킬 쿨타임 표시
         }
 
         public void Render(object sender, PaintEventArgs e)
         {
             CSRTRenderer.GetInstance().Form_Paint(sender, e);
-        }
-
-        private void Form1_Update(object sender, MouseEventArgs e)
-        {
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -165,8 +168,9 @@ namespace KW_Shooting
         private Point GetRandomLocation(Size size)
         {
             int maxX = ClientSize.Width - size.Width;
+            int minY = 120; // 최소 Y 위치를 120으로 설정
             int maxY = ClientSize.Height - size.Height;
-            return new Point(random.Next(maxX), random.Next(maxY - 80));
+            return new Point(random.Next(maxX), random.Next(minY, maxY));
         }
 
         private void Movement_Tick(object sender, EventArgs e)
@@ -187,10 +191,11 @@ namespace KW_Shooting
                     {
                         velocity.X = -velocity.X;
                     }
-                    if (newPosition.Y < 50 || newPosition.Y > ClientSize.Height - target.Height)
+                    if (newPosition.Y < 120 || newPosition.Y > ClientSize.Height - target.Height)
                     {
                         velocity.Y = -velocity.Y;
                     }
+
                     target.Location = newPosition;
 
                     // 속도 업데이트
@@ -284,7 +289,17 @@ namespace KW_Shooting
             if (RemainTime <= 0)
             {
                 CountDownTimer.Stop(); // 타이머를 멈춤
-                // 라운드 처리 코드
+                Round++; // 라운드 증가
+                round_txt.Text = Round.ToString(); // 라벨 값 갱신
+                RemainTime = 30; // 타이머 재설정
+                CountDownTimer.Start(); // 타이머 다시 시작
+                                        // 라운드 처리 코드(아직 X)
+                                        // 라운드 처리 코드
+                if (Round % 3 == 0)
+                {
+                    //여기다가 모달 추가해주시면 될 것같아요
+                   // AddSpecialMonster();
+                }
             }
             Time.Text = RemainTime.ToString();
         }
@@ -359,5 +374,17 @@ namespace KW_Shooting
             int dy = point2.Y - point1.Y;
             return Math.Sqrt(dx * dx + dy * dy);
         }
+
+        private void Mouse_Move(object sender, MouseEventArgs e)
+        {
+            // 마우스 위치에 따라 라벨 위치 업데이트
+            UpdateSkillLabelPosition(e.Location);
+        }
+        private void UpdateSkillLabelPosition(Point mousePosition)
+        {
+            int offset = 10; // 마우스 커서에서 라벨까지의 거리
+            Skill_Left_Time.Location = new Point(mousePosition.X + offset, mousePosition.Y + offset);
+        }
+
     }
 }
