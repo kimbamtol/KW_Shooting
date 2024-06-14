@@ -24,8 +24,8 @@ namespace KW_Shooting
         private int score = 0;
 
 
-        private int lives = 5;
-        private PictureBox[] lifeIndicators;
+        private int heart = 5;
+        private PictureBox[] heart_indicator;
 
         //라운드 변수
         private int Round = 1;
@@ -385,6 +385,8 @@ namespace KW_Shooting
             int offset = 10; // 마우스 커서에서 라벨까지의 거리
             Skill_Left_Time.Location = new Point(mousePosition.X + offset, mousePosition.Y + offset);
         }
+
+        
 
     }
 }

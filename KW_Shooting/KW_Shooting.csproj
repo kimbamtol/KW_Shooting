@@ -129,7 +129,10 @@
     <None Include="Resources\background1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Life\pixelheart.png" />
+    <Content Include="Resources\pixelheart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Life\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
