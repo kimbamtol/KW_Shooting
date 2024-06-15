@@ -150,5 +150,9 @@
   <ItemGroup>
     <None Include="Properties\DefaultW.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Musics\SkillW.wav" />
+    <Content Include="Resources\Special.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

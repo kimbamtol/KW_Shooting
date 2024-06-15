@@ -20,8 +20,10 @@ namespace KW_Shooting
         private Dictionary<PictureBox, Location> velocities = new Dictionary<PictureBox, Location>();
         private Random random = new Random();
         private Timer movementTimer;
-        private int RemainTime = 30;
+        private int RemainTime = 2;
         private int score = 0;
+        private int speed = 1;
+
         private Skill currentSkill = Skill.AUTOATTACK;
         private Timer WTimer;
 
@@ -299,6 +301,13 @@ namespace KW_Shooting
                     Location velocity2 = new Location(random.NextDouble() * 20 - 10, random.NextDouble() * 20 - 10);
                     velocities[newTarget2] = velocity2;
                 }
+                else if (clickedTarget.Name.StartsWith("SpecialMonster"))
+                {
+                    clickedTarget.Visible = false; // 클릭한 타겟 숨기기
+                    score += 100; // 특별한 몬스터는 더 많은 점수를 줌
+                    Point.Text = score.ToString();
+                    AddSpecialMonster(); // 새로운 특별한 몬스터 추가
+                }
             }
         }
 
@@ -324,14 +333,15 @@ namespace KW_Shooting
                 CountDownTimer.Stop(); // 타이머를 멈춤
                 Round++; // 라운드 증가
                 round_txt.Text = Round.ToString(); // 라벨 값 갱신
-                RemainTime = 30; // 타이머 재설정
+                RemainTime = 2; // 타이머 재설정
                 CountDownTimer.Start(); // 타이머 다시 시작
                                         // 라운드 처리 코드(아직 X)
                                         // 라운드 처리 코드
                 if (Round % 3 == 0)
                 {
                     //여기다가 모달 추가해주시면 될 것같아요
-                   // AddSpecialMonster();
+                    speed += 5;
+                   AddSpecialMonster();
                 }
             }
             Time.Text = RemainTime.ToString();
@@ -423,6 +433,7 @@ namespace KW_Shooting
         {
             movementTimer.Stop();
             Movement.Stop();
+            gun.SkillW();
             WTimer.Start();
         }
 
@@ -493,13 +504,100 @@ namespace KW_Shooting
         }
 
         // 게임 로직에 따라 목숨이 줄어드는 이벤트 발생 시 DecreaseLife 메서드 호출해서 라이프 감소
-        private void DecreaseLift()
+        private void DecreaseLif()
         {
             DecreaseLife();
         }
 
 
 
+        public class SpecialMonster
+        {
+            public PictureBox PictureBox { get; set; }
+            public Timer Timer { get; set; }
 
+            public SpecialMonster(PictureBox pictureBox, Timer timer)
+            {
+                PictureBox = pictureBox;
+                Timer = timer;
+            }
+        }
+
+        private List<SpecialMonster> specialMonsters = new List<SpecialMonster>();
+        private void AddSpecialMonster()
+        {
+            // 특별한 몬스터를 생성하고 설정
+            PictureBox specialMonster = new PictureBox
+            {
+                Name = $"SpecialMonster{targets.Count}",
+                Size = new Size(150, 150), // 크기는 좀 더 작게?...
+                BackColor = Color.Transparent,
+                Image = Properties.Resources.Special, // 이미지 나중에 교체
+                SizeMode = PictureBoxSizeMode.StretchImage
+            };
+            specialMonster.Location = GetRandomLocation(specialMonster.Size);
+            specialMonster.Click += Target_Click; 
+            this.Controls.Add(specialMonster);
+            targets.Add(specialMonster);
+
+            // 속도는 초반에 느리다가 점점 빨라지도록
+            Location velocity = new Location(random.NextDouble() * speed - 2, random.NextDouble() * speed - 2);
+            velocities[specialMonster] = velocity;
+
+            // 타이머 설정
+            Timer specialMonsterTimer = new Timer();
+            specialMonsterTimer.Interval = 5000; // 5초
+            specialMonsterTimer.Tick += (s, e) => SpecialMonsterTimeout(s, e, specialMonster);
+            specialMonsterTimer.Start();
+
+            specialMonsters.Add(new SpecialMonster(specialMonster, specialMonsterTimer));
+        }
+        private void SpecialMonsterTimeout(object sender, EventArgs e, PictureBox specialMonster)
+        {
+            // 타이머가 만료되면 Herat 감소
+            if (specialMonster.Visible)
+            {
+                specialMonster.Visible = false; //
+                DecreaseLife();
+            }
+
+            // 타이머 정지 및 제거
+            var specialMonsterData = specialMonsters.FirstOrDefault(sm => sm.PictureBox == specialMonster);
+            if (specialMonsterData != null)
+            {
+                specialMonsterData.Timer.Stop();
+                specialMonsters.Remove(specialMonsterData);
+            }
+
+        }
+
+        private void SpecialMonster_Click(object sender, EventArgs e)
+        {
+            PictureBox clickedMonster = sender as PictureBox;
+
+            if (currentSkill == Skill.AUTOATTACK)
+            {
+                gun.Position = TargetCenterPos(clickedMonster);
+                SkillPlay();
+            }
+
+            if (clickedMonster != null && clickedMonster.Visible)
+            {
+                clickedMonster.Visible = false; 
+                score += 100; // 한 100점?...
+                Point.Text = score.ToString();
+
+                // 타이머 정지 및 제거
+                var specialMonster = specialMonsters.FirstOrDefault(sm => sm.PictureBox == clickedMonster);
+                if (specialMonster != null)
+                {
+                    specialMonster.Timer.Stop();
+                    specialMonsters.Remove(specialMonster);
+                }
+
+                // 새로 추가(계속 하나씩은 있도록)
+                AddSpecialMonster();
+            }
+        }
     }
 }
