@@ -140,5 +140,8 @@
   <ItemGroup>
     <None Include="Resources\Musics\SkillQ.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Special.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
