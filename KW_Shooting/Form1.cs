@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -47,6 +47,7 @@ namespace KW_Shooting
             InitializeMovementTimer();
             InitializeCountdownTimer();
             InitializeSkillTimer();
+            InitializeHeart(); // 추가된 코드
             Movement.Interval = 50; // 타이머 간격을 50ms로 설정
             Movement.Tick += Movement_Tick; // 타이머 이벤트 핸들러
             Movement.Start(); // 타이머 시작 !
@@ -412,7 +413,55 @@ namespace KW_Shooting
             Skill_Left_Time.Location = new Point(mousePosition.X + offset, mousePosition.Y + offset);
         }
 
-        
+        private void InitializeHeart()
+        {
+            heart_indicator = new PictureBox[] { life1, life2, life3, life4, life5 };
+
+            foreach (var Left_life in heart_indicator)
+            {
+                Left_life.Image = Properties.Resources.pixelheart;
+                Left_life.SizeMode = PictureBoxSizeMode.StretchImage;
+            }
+
+            UpdateHeartDisplay();
+        }
+
+        private void UpdateHeartDisplay()
+        {
+            for (int i = 0; i < heart_indicator.Length; i++)
+            {
+                heart_indicator[i].Visible = i < heart;
+            }
+        }
+
+        private void DecreaseLife()
+        {
+            if (heart > 0)
+            {
+                heart--;
+                UpdateHeartDisplay();
+
+                if (heart == 0)
+                {
+                    GameOver();
+                }
+            }
+        }
+
+        private void GameOver()
+        {
+            // 게임 오버 처리 로직 추가
+            MessageBox.Show("Game Over");
+        }
+
+        // 게임 로직에 따라 목숨이 줄어드는 이벤트 발생 시 DecreaseLife 메서드 호출해서 라이프 감소
+        private void DecreaseLift()
+        {
+            DecreaseLife();
+        }
+
+
+
 
     }
 }
