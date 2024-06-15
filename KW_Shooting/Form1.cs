@@ -22,7 +22,7 @@ namespace KW_Shooting
         private Timer movementTimer;
         private int RemainTime = 60;
         private int score = 0;
-
+        private Skill currentSkill = Skill.AUTOATTACK;
         // <summary>
         // 김태훈
         List<object> objects = new List<object>();
@@ -202,11 +202,32 @@ namespace KW_Shooting
             }
         }
 
+        private Vec2 TargetCenterPos(PictureBox target)
+        {
+            return new Vec2(target.Location.X + target.Size.Width / 2, target.Location.Y + target.Size.Height / 2);
+        }
+
+        private void SkillPlay()
+        {
+            switch (currentSkill)
+            {
+                case Skill.AUTOATTACK:
+                    gun.AutoAttack();
+                    break;
+                case Skill.Skill_Q:
+                    gun.SkillQ(); 
+                    break;
+            }
+        }
         private void Target_Click(object sender, EventArgs e)
         {
             PictureBox clickedTarget = sender as PictureBox;
-            gun.Position = new Vec2(clickedTarget.Location.X + clickedTarget.Size.Width / 2, clickedTarget.Location.Y + clickedTarget.Size.Height / 2);
-            gun.Shoot("Shooting1");
+
+            gun.Position = TargetCenterPos(clickedTarget);
+            if(currentSkill == Skill.AUTOATTACK)
+            {
+                SkillPlay();
+            }
 
             if (clickedTarget != null && clickedTarget.Visible)
             {
@@ -267,7 +288,7 @@ namespace KW_Shooting
         private void Form1_MouseClick(object sender, MouseEventArgs e)
         {
             gun.Position = new Vec2(e.X, e.Y);
-            gun.Shoot("Shooting1");
+            SkillPlay();
         }
 
         private void InitializeCountdownTimer()
@@ -319,7 +340,9 @@ namespace KW_Shooting
             {
                 // Q 키를 눌렀을 때의 동작 추가
                 // 스킬 발동
+                currentSkill = Skill.Skill_Q;
                 ActivateSkill();
+                currentSkill = Skill.AUTOATTACK;
             }
         }
 
@@ -331,6 +354,10 @@ namespace KW_Shooting
             // 마우스 클릭 위치
             Point clickPosition = Cursor.Position;
             clickPosition = PointToClient(clickPosition);
+
+            //스킬 애니메이션
+            gun.Position = new Vec2(clickPosition.X, clickPosition.Y);
+            SkillPlay();
 
             // 주변에 있는 타겟을 감지하고 클릭한 것으로 처리
             for (int i = 0; i < targets.Count; i++)
@@ -346,7 +373,6 @@ namespace KW_Shooting
                 }
                 //큰 이펙트 하나 추가가 되면 좋을 듯
             }
-
             // 스킬 쿨타임 타이머 시작
             Skill_Timer.Start();
             Skill_Left_Time.Text = "5"; // 스킬 쿨타임 초기화 (5초)

@@ -128,5 +128,17 @@
   <ItemGroup>
     <None Include="Resources\background1.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\explosion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\SkillQ.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\SkillQ.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Musics\SkillQ.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

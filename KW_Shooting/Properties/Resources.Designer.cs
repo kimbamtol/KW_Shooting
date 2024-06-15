@@ -61,6 +61,15 @@ namespace KW_Shooting.Properties {
         }
         
         /// <summary>
+        ///   System.IO.MemoryStream과(와) 유사한 System.IO.UnmanagedMemoryStream 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream AutoAttackSound {
+            get {
+                return ResourceManager.GetStream("AutoAttackSound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
         internal static System.Drawing.Bitmap background1 {
@@ -102,6 +111,16 @@ namespace KW_Shooting.Properties {
         /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
+        internal static System.Drawing.Bitmap explosion {
+            get {
+                object obj = ResourceManager.GetObject("explosion", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
         internal static System.Drawing.Bitmap gunEffect {
             get {
                 object obj = ResourceManager.GetObject("gunEffect", resourceCulture);
@@ -116,15 +135,6 @@ namespace KW_Shooting.Properties {
             get {
                 object obj = ResourceManager.GetObject("gunner", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   System.IO.MemoryStream과(와) 유사한 System.IO.UnmanagedMemoryStream 형식의 지역화된 리소스를 찾습니다.
-        /// </summary>
-        internal static System.IO.UnmanagedMemoryStream GUNSHOT {
-            get {
-                return ResourceManager.GetStream("GUNSHOT", resourceCulture);
             }
         }
         
@@ -145,6 +155,25 @@ namespace KW_Shooting.Properties {
             get {
                 object obj = ResourceManager.GetObject("shooting", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Bitmap SkillQ {
+            get {
+                object obj = ResourceManager.GetObject("SkillQ", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.IO.MemoryStream과(와) 유사한 System.IO.UnmanagedMemoryStream 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream SkillQSound {
+            get {
+                return ResourceManager.GetStream("SkillQSound", resourceCulture);
             }
         }
     }

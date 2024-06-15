@@ -44,7 +44,7 @@ namespace KW_Shooting
                     for (int y = 0; y < image.Height; y++)
                     {
                         Color pixelColor = image.GetPixel(x, y);
-                        if (pixelColor == Color.FromArgb(255, 0, 255))
+                        if (pixelColor == Color.FromArgb(255, 0, 255)|| pixelColor == Color.FromArgb(254, 0, 255) || pixelColor == Color.FromArgb(255, 0, 254))
                         {
                             image.SetPixel(x, y, Color.FromArgb(0, 0, 0, 0)); // 투명 픽셀로 설정
                         }
