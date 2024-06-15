@@ -111,6 +111,26 @@ namespace KW_Shooting.Properties {
         /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
+        internal static System.Drawing.Bitmap DefaultQ {
+            get {
+                object obj = ResourceManager.GetObject("DefaultQ", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Bitmap DefaultW {
+            get {
+                object obj = ResourceManager.GetObject("DefaultW", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
         internal static System.Drawing.Bitmap explosion {
             get {
                 object obj = ResourceManager.GetObject("explosion", resourceCulture);
@@ -164,6 +184,16 @@ namespace KW_Shooting.Properties {
         internal static System.Drawing.Bitmap shooting {
             get {
                 object obj = ResourceManager.GetObject("shooting", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Bitmap SkillPanel {
+            get {
+                object obj = ResourceManager.GetObject("SkillPanel", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

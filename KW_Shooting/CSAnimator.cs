@@ -25,6 +25,7 @@ namespace KW_Shooting
         private CSObject m_owner;
         private CSAnimation m_curAnim;
         public CSObject Owner { get { return m_owner; } set { m_owner = value; } }
+        public Bitmap DefaultImg { get; set; }
 
         private Dictionary<string, CSAnimation> m_dicAnim;
 
@@ -68,6 +69,7 @@ namespace KW_Shooting
             m_curAnim = m_dicAnim[animation_name];
             m_playCount = play_time;
         }
+
         public void StopAnimation()
         {
             m_curAnim.Initialize();
@@ -86,6 +88,11 @@ namespace KW_Shooting
                     Console.WriteLine(e.ToString());
                 } 
                 
+            }
+            else if(DefaultImg != null)
+            {
+                g.DrawImage(DefaultImg, new RectangleF(m_owner.Position.x - m_owner.Scale.x / 2, m_owner.Position.y - m_owner.Scale.y / 2,
+                    m_owner.Scale.x, m_owner.Scale.y));
             }
         }
         public void Update()

@@ -21,6 +21,7 @@ namespace KW_Shooting
         protected CSAnimator m_animator;
 
         public Vec2 Position { get { return m_pos; } set { m_pos = value; } }
+        public Vec2 Scale { get { return m_scale; } set { m_scale = value; } }
         public CSObject(Vec2 pos)
         {
             m_pos = pos;

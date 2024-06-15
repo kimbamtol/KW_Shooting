@@ -13,8 +13,8 @@ namespace KW_Shooting
     enum Skill
     {
         AUTOATTACK,
-        Skill_Q,
-        END,
+        SKILL_Q,
+        SKILL_W,
     }
     internal class CSShooting : CSObject
     {
@@ -58,7 +58,7 @@ namespace KW_Shooting
 
         public void SkillQ()
         {
-            effectSound[(int)Skill.Skill_Q].Play();
+            effectSound[(int)Skill.SKILL_Q].Play();
             m_animator.PlayAnimation("SkillQ", 1);
         }
     }

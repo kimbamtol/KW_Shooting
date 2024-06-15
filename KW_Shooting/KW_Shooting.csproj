@@ -50,6 +50,7 @@
     <Compile Include="CSAnimator.cs" />
     <Compile Include="CSBG.cs" />
     <Compile Include="CSObject.cs" />
+    <Compile Include="CSPanel.cs" />
     <Compile Include="CSRTRenderer.cs" />
     <Compile Include="CSShooting.cs" />
     <Compile Include="CSTimeManager.cs" />
@@ -139,6 +140,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Musics\SkillQ.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\SkillPanel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\DefaultQ.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\DefaultW.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

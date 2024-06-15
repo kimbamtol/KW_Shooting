@@ -29,14 +29,9 @@ namespace KW_Shooting
             }
             return instance;
         }
-
-        public int GetDT()
-        {
-            return stopwatch.Elapsed.Seconds;
-        }
         public float GetFDT()
         {
-            return stopwatch.Elapsed.Milliseconds / 1000f;
+            return stopwatch.Elapsed.Seconds + stopwatch.Elapsed.Milliseconds / 1000f;
         }
     }
 }

@@ -23,6 +23,7 @@ namespace KW_Shooting
         private int RemainTime = 30;
         private int score = 0;
         private Skill currentSkill = Skill.AUTOATTACK;
+        private Timer WTimer;
 
         private int heart = 5;
         private PictureBox[] heart_indicator;
@@ -39,6 +40,8 @@ namespace KW_Shooting
 
         CSShooting gun;
         CSBG backgroundImg;
+        CSPanel panelQ;
+        CSPanel panelW;
 
         public Form1()
         {
@@ -55,8 +58,12 @@ namespace KW_Shooting
 
             gun = new CSShooting(new Vec2(0f, 0f));
             backgroundImg = new CSBG(new Vec2(0, 0), new Vec2(this.Width, this.Height));
+            panelQ = new CSPanel(new Vec2(this.Width / 2 - 40, this.Height - 80), Skill.SKILL_Q);
+            panelW = new CSPanel(new Vec2(this.Width / 2 + 40, this.Height - 80), Skill.SKILL_W);
             objects.Add(backgroundImg);
             objects.Add(gun);
+            objects.Add(panelQ);
+            objects.Add(panelW);
 
             CSTimeManager.GetInstance();
 
@@ -80,6 +87,10 @@ namespace KW_Shooting
             MediaPlayer.URL =
                 startDirectory + "\\Resources\\Musics\\BGM.wav";
             MediaPlayer.settings.volume = 70;
+
+            WTimer = new Timer();
+            WTimer.Interval = 5000;
+            WTimer.Tick += movementStart;
 
             this.KeyDown += new KeyEventHandler(Form1_KeyDown); // 키 이벤트 핸들러 추가
             this.MouseMove += new MouseEventHandler(Mouse_Move); // 마우스 옆에 스킬 쿨타임 표시
@@ -219,7 +230,7 @@ namespace KW_Shooting
                 case Skill.AUTOATTACK:
                     gun.AutoAttack();
                     break;
-                case Skill.Skill_Q:
+                case Skill.SKILL_Q:
                     gun.SkillQ(); 
                     break;
             }
@@ -355,9 +366,21 @@ namespace KW_Shooting
             {
                 // Q 키를 눌렀을 때의 동작 추가
                 // 스킬 발동
-                currentSkill = Skill.Skill_Q;
+                currentSkill = Skill.SKILL_Q;
                 ActivateSkill();
                 currentSkill = Skill.AUTOATTACK;
+                panelQ.Charging();
+
+            }
+            if (e.KeyCode == Keys.W && Skill_Left_Time.Text == "0")
+            {
+                // W 키를 눌렀을 때의 동작 추가
+                // 스킬 발동
+                currentSkill = Skill.SKILL_W;
+                timeSkill();
+                currentSkill = Skill.AUTOATTACK;
+                panelW.Charging();
+
             }
         }
 
@@ -391,8 +414,23 @@ namespace KW_Shooting
             // 스킬 쿨타임 타이머 시작
             Skill_Timer.Start();
             Skill_Left_Time.Text = "5"; // 스킬 쿨타임 초기화 (5초)
+
+            panelQ.Charging();
         }
 
+        private void timeSkill()
+        {
+            movementTimer.Stop();
+            Movement.Stop();
+            WTimer.Start();
+        }
+
+        private void movementStart(object sender, EventArgs e)
+        {
+            movementTimer.Start();
+            Movement.Start();
+            WTimer.Stop();
+        }
         // 두 점 사이의 거리 계산
         private double DistanceBetweenPoints(Point point1, Point point2)
         {
