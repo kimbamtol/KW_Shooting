@@ -31,7 +31,7 @@ namespace KW_Shooting
         private Timer bossMonsterTimer;
         private int bossMonsterDuration = 10; // 보스 몬스터 지속 시간
         private int bossMonsterClickCount = 0; // 보스 몬스터 클릭 횟수
-        private const int BossMonsterMaxClicks = 45; // 보스 몬스터 처치에 필요한 클릭 횟수
+        private const int BossMonsterMaxClicks = 60; // 보스 몬스터 처치에 필요한 클릭 횟수
 
         private Skill currentSkill = Skill.AUTOATTACK;
         private Timer WTimer;
@@ -776,7 +776,7 @@ namespace KW_Shooting
             bossMonster = new PictureBox
             {
                 Name = "BossMonster",
-                Size = new Size(450, 450), // 보스 몬스터 크기
+                Size = new Size(300, 300), // 보스 몬스터 크기
                 BackColor = Color.Transparent,
                 Image = Properties.Resources.Book1, // 일반 몬스터와 동일한 이미지 설정
                 SizeMode = PictureBoxSizeMode.StretchImage,
