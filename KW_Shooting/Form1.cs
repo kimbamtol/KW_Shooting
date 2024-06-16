@@ -651,11 +651,17 @@ namespace KW_Shooting
             colorChangeTimer.Interval = 700; // 0.7초 간격으로 이미지 변경
             colorChangeTimer.Tick += (s, e) =>
             {
-                var sm = specialMonsters.FirstOrDefault(monster => monster.PictureBox == specialMonster);
-                if (sm != null && sm.CurrentImageIndex < monsterImages.Length)
+                for (int i = 0; i < specialMonsters.Count; i++)
                 {
-                    sm.PictureBox.Image = monsterImages[sm.CurrentImageIndex];
-                    sm.CurrentImageIndex++;
+                    if (specialMonsters[i].PictureBox == specialMonster)
+                    {
+                        if (specialMonsters[i].CurrentImageIndex < monsterImages.Length)
+                        {
+                            specialMonsters[i].PictureBox.Image = monsterImages[specialMonsters[i].CurrentImageIndex];
+                            specialMonsters[i].CurrentImageIndex++;
+                        }
+                        break;
+                    }
                 }
             };
             colorChangeTimer.Start();
