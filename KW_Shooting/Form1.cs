@@ -9,8 +9,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Numerics; //사용자 자료형
-using Utils; //사용자 인터페이스
+using Numerics; // 사용자 자료형
+using Utils; // 사용자 인터페이스
 
 namespace KW_Shooting
 {
@@ -31,7 +31,7 @@ namespace KW_Shooting
         private Timer bossMonsterTimer;
         private int bossMonsterDuration = 10; // 보스 몬스터 지속 시간
         private int bossMonsterClickCount = 0; // 보스 몬스터 클릭 횟수
-        private const int BossMonsterMaxClicks = 25; // 보스 몬스터 처치에 필요한 클릭 횟수
+        private const int BossMonsterMaxClicks = 45; // 보스 몬스터 처치에 필요한 클릭 횟수
 
         private Skill currentSkill = Skill.AUTOATTACK;
         private Timer WTimer;
@@ -39,10 +39,10 @@ namespace KW_Shooting
         private int heart = 5;
         private PictureBox[] heart_indicator;
 
-        //라운드 변수
+        // 라운드 변수
         private int Round = 1;
 
-        //게임 상태 관리
+        // 게임 상태 관리
         enum GameState
         {
             Normal,
@@ -504,8 +504,6 @@ namespace KW_Shooting
                 currentSkill = Skill.AUTOATTACK;
                 panelQ.Charging();
                 panelW.Charging();
-
-
             }
             if (e.KeyCode == Keys.W && Skill_Left_Time.Text == "0")
             {
@@ -516,7 +514,6 @@ namespace KW_Shooting
                 currentSkill = Skill.AUTOATTACK;
                 panelQ.Charging();
                 panelW.Charging();
-
             }
         }
 
@@ -622,6 +619,9 @@ namespace KW_Shooting
 
             // 게임 오버 메시지 표시
             MessageBox.Show($"Game Over!\nYour score is: {score}");
+
+            // round_txt에 "종강" 출력
+            round_txt.Text = "종강";
 
             // 게임 종료
             this.Close(); // 폼을 닫아 게임을 종료합니다.
@@ -776,7 +776,7 @@ namespace KW_Shooting
             bossMonster = new PictureBox
             {
                 Name = "BossMonster",
-                Size = new Size(300, 300), // 보스 몬스터 크기
+                Size = new Size(450, 450), // 보스 몬스터 크기
                 BackColor = Color.Transparent,
                 Image = Properties.Resources.Book1, // 일반 몬스터와 동일한 이미지 설정
                 SizeMode = PictureBoxSizeMode.StretchImage,
@@ -811,7 +811,12 @@ namespace KW_Shooting
             if (bossMonsterDuration <= 0)
             {
                 bossMonsterTimer.Stop();
-                bossMonster.Visible = false;
+                if (bossMonster.Visible)
+                {
+                    bossMonster.Visible = false;
+                    score -= 500; // 보스 몬스터를 시간 내에 처치하지 못하면 500점 감점
+                    Point.Text = score.ToString();
+                }
             }
         }
 
