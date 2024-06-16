@@ -31,7 +31,12 @@ namespace KW_Shooting
         private Timer bossMonsterTimer;
         private int bossMonsterDuration = 10; // 보스 몬스터 지속 시간
         private int bossMonsterClickCount = 0; // 보스 몬스터 클릭 횟수
-        private const int BossMonsterMaxClicks = 60; // 보스 몬스터 처치에 필요한 클릭 횟수
+        private const int BossMonsterMaxClicks = 10; // 보스 몬스터 처치에 필요한 클릭 횟수
+
+        //이미지 변경
+        private Timer bossMonsterImageTimer;
+        private Image[] bossMonsterImages;
+        private int currentBossMonsterImageIndex = 0;
 
         private Skill currentSkill = Skill.AUTOATTACK;
         private Timer WTimer;
@@ -83,7 +88,7 @@ namespace KW_Shooting
             Movement.Start(); // 타이머 시작 !
 
             round_txt.Text = "1"; // 초기 라운드를 1로 설정
-            RemainTime = 3; // 초기 남은 시간을 30초로 설정
+            RemainTime = 10; // 초기 남은 시간을 30초로 설정
 
             this.DoubleBuffered = true;
 
@@ -776,14 +781,36 @@ namespace KW_Shooting
             bossMonster = new PictureBox
             {
                 Name = "BossMonster",
-                Size = new Size(300, 300), // 보스 몬스터 크기
+                Size = new Size(300, 300),
                 BackColor = Color.Transparent,
-                Image = Properties.Resources.Book1, // 일반 몬스터와 동일한 이미지 설정
+                Image = Properties.Resources.b1, // 맨처음에는 닫혀있는 책 이미지
                 SizeMode = PictureBoxSizeMode.StretchImage,
-                Visible = false // 초기에는 보이지 않도록 설정
+                Visible = false 
             };
-            bossMonster.Click += BossMonster_Click; // 클릭 이벤트 핸들러
+            bossMonster.Click += BossMonster_Click; 
             this.Controls.Add(bossMonster);
+
+            // 보스몬스터 이미지 저장 배열
+            bossMonsterImages = new Image[]
+            {
+            Properties.Resources.b1,
+            Properties.Resources.b2,
+            Properties.Resources.b3,
+            Properties.Resources.b4,
+            Properties.Resources.b5,
+            Properties.Resources.b6
+            };
+
+            // 보스 몬스터 이미지 변경 타이머 설정
+            bossMonsterImageTimer = new Timer();
+            bossMonsterImageTimer.Interval = 300; // 0.3초 간격
+            bossMonsterImageTimer.Tick += BossMonsterImageTimer_Tick;
+        }
+        // 보스 몬스터 이미지 변경 타이머 이벤트 핸들러
+        private void BossMonsterImageTimer_Tick(object sender, EventArgs e)
+        {
+            currentBossMonsterImageIndex = (currentBossMonsterImageIndex + 1) % bossMonsterImages.Length;
+            bossMonster.Image = bossMonsterImages[currentBossMonsterImageIndex];
         }
 
         // 보스 몬스터 등장 메서드
@@ -801,6 +828,9 @@ namespace KW_Shooting
             bossMonsterTimer.Tick += BossMonsterTimer_Tick;
             bossMonsterDuration = 10; // 보스 몬스터 지속 시간 초기화
             bossMonsterTimer.Start();
+
+            // 보스 몬스터 이미지 변경 타이머 시작
+            bossMonsterImageTimer.Start();
         }
 
         // 보스 몬스터 타이머 이벤트 핸들러
@@ -811,6 +841,7 @@ namespace KW_Shooting
             if (bossMonsterDuration <= 0)
             {
                 bossMonsterTimer.Stop();
+                bossMonsterImageTimer.Stop(); // 이미지 변경 타이머 정지
                 if (bossMonster.Visible)
                 {
                     bossMonster.Visible = false;
@@ -836,6 +867,7 @@ namespace KW_Shooting
                     score += 1000; // 보스 몬스터를 처치하면 1000점 추가
                     Point.Text = score.ToString();
                     bossMonsterTimer.Stop();
+                    bossMonsterImageTimer.Stop(); // 이미지 변경 타이머 정지
                 }
             }
         }
@@ -847,6 +879,7 @@ namespace KW_Shooting
             {
                 bossMonster.Visible = false;
                 bossMonsterTimer.Stop();
+                bossMonsterImageTimer.Stop(); // 이미지 변경 타이머 정지
             }
         }
     }
