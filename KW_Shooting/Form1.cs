@@ -681,8 +681,47 @@ namespace KW_Shooting
             WTimer.Stop();
             examTimer.Stop();
 
+            // 학점 계산
+            string grade;
+            if (score >= 3800)
+            {
+                grade = "A+";
+            }
+            else if (score >= 3500)
+            {
+                grade = "A0";
+            }
+            else if (score >= 3200)
+            {
+                grade = "B+";
+            }
+            else if (score >= 3000)
+            {
+                grade = "B0";
+            }
+            else if (score >= 2500)
+            {
+                grade = "C+";
+            }
+            else if (score >= 2000)
+            {
+                grade = "C0";
+            }
+            else if (score >= 1500)
+            {
+                grade = "D+";
+            }
+            else if (score >= 1000)
+            {
+                grade = "D0";
+            }
+            else
+            {
+                grade = "F";
+            }
+
             // 게임 오버 메시지 표시
-            MessageBox.Show($"Game Over!\nYour score is: {score}");
+            MessageBox.Show($"Game Over!\n최종 점수: {score}\n당신의 학점은 {grade} 입니다.");
 
             // round_txt에 "종강" 출력
             round_txt.Text = "종강";
@@ -690,6 +729,7 @@ namespace KW_Shooting
             // 게임 종료
             this.Close(); // 폼을 닫아 게임을 종료합니다.
         }
+
 
         private void DecreaseLif()
         {
