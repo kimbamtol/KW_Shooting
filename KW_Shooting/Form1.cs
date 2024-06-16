@@ -336,12 +336,10 @@ namespace KW_Shooting
                 round_txt.Text = Round.ToString(); // 라벨 값 갱신
                 RemainTime = 2; // 타이머 재설정
                 CountDownTimer.Start(); // 타이머 다시 시작
-                                        // 라운드 처리 코드(아직 X)
-                                        // 라운드 처리 코드
+
                 if (Round % 3 == 0)
                 {
-                    //여기다가 모달 추가해주시면 될 것같아요
-                    speed += 5;
+                    speed += 5; // 스페셜 타겟의 속도를 3라운드마다 5씩 증가
                    AddSpecialMonster();
                 }
             }
@@ -444,6 +442,7 @@ namespace KW_Shooting
             Movement.Start();
             WTimer.Stop();
         }
+
         // 두 점 사이의 거리 계산
         private double DistanceBetweenPoints(Point point1, Point point2)
         {
@@ -527,8 +526,10 @@ namespace KW_Shooting
         private List<SpecialMonster> specialMonsters = new List<SpecialMonster>();
         private void AddSpecialMonster()
         {
+            // 이미지를 로드합니다.
             LoadMonsterImages();
 
+            // 특별한 몬스터를 생성하고 설정
             PictureBox specialMonster = new PictureBox
             {
                 Name = $"SpecialMonster{targets.Count}",
@@ -548,7 +549,7 @@ namespace KW_Shooting
 
             // 타이머 설정
             Timer specialMonsterTimer = new Timer();
-            specialMonsterTimer.Interval = 5000; 
+            specialMonsterTimer.Interval = 5000; // 5초
             specialMonsterTimer.Tick += (s, e) => SpecialMonsterTimeout(s, e, specialMonster);
             specialMonsterTimer.Start();
 
@@ -557,17 +558,24 @@ namespace KW_Shooting
             colorChangeTimer.Interval = 700; // 0.7초 간격으로 이미지 변경
             colorChangeTimer.Tick += (s, e) =>
             {
-                var sm = specialMonsters.FirstOrDefault(monster => monster.PictureBox == specialMonster);
-                if (sm != null && sm.CurrentImageIndex < monsterImages.Length)
+                for (int i = 0; i < specialMonsters.Count; i++)
                 {
-                    sm.PictureBox.Image = monsterImages[sm.CurrentImageIndex];
-                    sm.CurrentImageIndex++;
+                    if (specialMonsters[i].PictureBox == specialMonster)
+                    {
+                        if (specialMonsters[i].CurrentImageIndex < monsterImages.Length)
+                        {
+                            specialMonsters[i].PictureBox.Image = monsterImages[specialMonsters[i].CurrentImageIndex];
+                            specialMonsters[i].CurrentImageIndex++;
+                        }
+                        break;
+                    }
                 }
             };
             colorChangeTimer.Start();
 
             specialMonsters.Add(new SpecialMonster(specialMonster, specialMonsterTimer, colorChangeTimer));
         }
+
 
 
         private void SpecialMonsterTimeout(object sender, EventArgs e, PictureBox specialMonster)
@@ -580,14 +588,18 @@ namespace KW_Shooting
             }
 
             // 타이머 정지 및 제거
-            var specialMonsterData = specialMonsters.FirstOrDefault(sm => sm.PictureBox == specialMonster);
-            if (specialMonsterData != null)
+            for (int i = 0; i < specialMonsters.Count; i++)
             {
-                specialMonsterData.Timer.Stop();
-                specialMonsterData.ColorChangeTimer.Stop();
-                specialMonsters.Remove(specialMonsterData);
+                if (specialMonsters[i].PictureBox == specialMonster)
+                {
+                    specialMonsters[i].Timer.Stop();
+                    specialMonsters[i].ColorChangeTimer.Stop();
+                    specialMonsters.RemoveAt(i);
+                    break;
+                }
             }
         }
+
 
         private void SpecialMonster_Click(object sender, EventArgs e)
         {
@@ -606,18 +618,22 @@ namespace KW_Shooting
                 Point.Text = score.ToString();
 
                 // 타이머 정지 및 제거
-                var specialMonster = specialMonsters.FirstOrDefault(sm => sm.PictureBox == clickedMonster);
-                if (specialMonster != null)
+                for (int i = 0; i < specialMonsters.Count; i++)
                 {
-                    specialMonster.Timer.Stop();
-                    specialMonster.ColorChangeTimer.Stop();
-                    specialMonsters.Remove(specialMonster);
+                    if (specialMonsters[i].PictureBox == clickedMonster)
+                    {
+                        specialMonsters[i].Timer.Stop();
+                        specialMonsters[i].ColorChangeTimer.Stop();
+                        specialMonsters.RemoveAt(i);
+                        break;
+                    }
                 }
 
                 // 새로 추가(계속 하나씩은 있도록)
                 AddSpecialMonster();
             }
         }
+
 
     }
 }
