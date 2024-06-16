@@ -159,6 +159,12 @@
     <Content Include="Resources\b5.png" />
     <Content Include="Resources\b6.png" />
     <Content Include="Resources\Book_2.png" />
+    <Content Include="Resources\p1.png" />
+    <Content Include="Resources\p2.png" />
+    <Content Include="Resources\p3.png" />
+    <Content Include="Resources\p4.png" />
+    <Content Include="Resources\p5.png" />
+    <Content Include="Resources\p6.png" />
     <Content Include="Resources\s1.png" />
     <Content Include="Resources\s2.png" />
     <Content Include="Resources\s3.png" />

@@ -37,10 +37,15 @@ namespace KW_Shooting
         private int bossMonsterClickCount = 0; // 보스 몬스터 클릭 횟수
         private const int BossMonsterMaxClicks = 10; // 보스 몬스터 처치에 필요한 클릭 횟수
 
-        //이미지 변경
+        // 보스 이미지 변경
         private Timer bossMonsterImageTimer;
         private Image[] bossMonsterImages;
         private int currentBossMonsterImageIndex = 0;
+
+        // 프로페서 이미지 변경
+        private Timer professorImageChangeTimer;
+        private Image[] professorMonsterImages;
+        private int currentProfessorImageIndex = 0;
 
         private Skill currentSkill = Skill.AUTOATTACK;
         private Timer WTimer;
@@ -134,6 +139,22 @@ namespace KW_Shooting
             WTimer.Tick += movementStart;
 
             this.KeyDown += new KeyEventHandler(Form1_KeyDown); // 키 이벤트 핸들러 추가
+
+            // 이미지 배열 초기화
+            professorMonsterImages = new Image[]
+            {
+             Properties.Resources.p1,
+             Properties.Resources.p2,
+             Properties.Resources.p3,
+             Properties.Resources.p4,
+             Properties.Resources.p5,
+             Properties.Resources.p6
+            };
+
+            // 이미지 변경 타이머 설정
+            professorImageChangeTimer = new Timer();
+            professorImageChangeTimer.Interval = 300; // 0.3초 간격
+            professorImageChangeTimer.Tick += ProfessorImageChangeTimer_Tick;
         }
 
         public void Render(object sender, PaintEventArgs e)
@@ -931,7 +952,7 @@ namespace KW_Shooting
                     Name = $"ProfessorMonster{i}",
                     Size = new Size(100, 100), // 교수 몬스터 크기
                     BackColor = Color.Transparent,
-                    Image = Properties.Resources.Special, // 교수 몬스터 이미지 설정
+                    Image = Properties.Resources.p1, // 초기 이미지 설정
                     SizeMode = PictureBoxSizeMode.StretchImage,
                     Visible = false // 초기에는 보이지 않도록 설정
                 };
@@ -941,6 +962,18 @@ namespace KW_Shooting
             }
         }
 
+        // 이미지 변경 타이머 이벤트 핸들러
+        private void ProfessorImageChangeTimer_Tick(object sender, EventArgs e)
+        {
+            currentProfessorImageIndex = (currentProfessorImageIndex + 1) % professorMonsterImages.Length;
+            foreach (var professorMonster in professorMonsters)
+            {
+                if (professorMonster.Visible)
+                {
+                    professorMonster.Image = professorMonsterImages[currentProfessorImageIndex];
+                }
+            }
+        }
         // 교수 몬스터 등장 메서드
         private void ShowProfessorMonsters()
         {
@@ -953,6 +986,9 @@ namespace KW_Shooting
                 Location velocity = new Location(random.NextDouble() * 20 - 10, random.NextDouble() * 20 - 10);
                 professorVelocities[professorMonster] = velocity;
             }
+
+            // 이미지 변경 타이머 시작
+            professorImageChangeTimer.Start();
         }
 
         // 교수 몬스터 클릭 이벤트 핸들러
@@ -979,7 +1015,7 @@ namespace KW_Shooting
                 Name = $"ProfessorMonster{professorMonsters.Count}",
                 Size = new Size(100, 100), // 교수 몬스터 크기
                 BackColor = Color.Transparent,
-                Image = Properties.Resources.Special, // 교수 몬스터 이미지 설정
+                Image = Properties.Resources.p1, // 교수 몬스터 이미지 설정
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 Visible = true // 보이도록 설정
             };
@@ -1003,6 +1039,9 @@ namespace KW_Shooting
                     professorMonster.Visible = false;
                 }
             }
+
+            // 이미지 변경 타이머 정지
+            professorImageChangeTimer.Stop();
         }
     }
 }
