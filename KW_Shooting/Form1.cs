@@ -456,6 +456,8 @@ namespace KW_Shooting
                 ActivateSkill();
                 currentSkill = Skill.AUTOATTACK;
                 panelQ.Charging();
+                panelW.Charging();
+
 
             }
             if (e.KeyCode == Keys.W && Skill_Left_Time.Text == "0")
@@ -465,6 +467,7 @@ namespace KW_Shooting
                 currentSkill = Skill.SKILL_W;
                 timeSkill();
                 currentSkill = Skill.AUTOATTACK;
+                panelQ.Charging();
                 panelW.Charging();
 
             }
@@ -585,17 +588,35 @@ namespace KW_Shooting
         }
 
 
-
         public class SpecialMonster
         {
             public PictureBox PictureBox { get; set; }
             public Timer Timer { get; set; }
+            public Timer ColorChangeTimer { get; set; }
+            public int CurrentImageIndex { get; set; }
 
-            public SpecialMonster(PictureBox pictureBox, Timer timer)
+            public SpecialMonster(PictureBox pictureBox, Timer timer, Timer colorChangeTimer)
             {
                 PictureBox = pictureBox;
                 Timer = timer;
+                ColorChangeTimer = colorChangeTimer;
+                CurrentImageIndex = 0;
             }
+        }
+
+        private Image[] monsterImages;
+        private int currentImageIndex = 0;
+
+        private void LoadMonsterImages()
+        {
+            monsterImages = new Image[]
+            {
+                Properties.Resources.s1,
+                Properties.Resources.s2,
+                Properties.Resources.s3,
+                Properties.Resources.s4,
+                Properties.Resources.s5
+            };
         }
 
         private List<SpecialMonster> specialMonsters = new List<SpecialMonster>();
@@ -605,17 +626,17 @@ namespace KW_Shooting
             PictureBox specialMonster = new PictureBox
             {
                 Name = $"SpecialMonster{targets.Count}",
-                Size = new Size(150, 150), // 크기는 좀 더 작게?...
+                Size = new Size(100, 100), 
                 BackColor = Color.Transparent,
-                Image = Properties.Resources.Special, // 이미지 나중에 교체
+                Image = monsterImages[0], // 회색의 책으로 설정
                 SizeMode = PictureBoxSizeMode.StretchImage
             };
             specialMonster.Location = GetRandomLocation(specialMonster.Size);
-            specialMonster.Click += Target_Click;
+            specialMonster.Click += SpecialMonster_Click;
             this.Controls.Add(specialMonster);
             targets.Add(specialMonster);
 
-            // 속도는 초반에 느리다가 점점 빨라지도록
+            // 속도 설정
             Location velocity = new Location(random.NextDouble() * speed - 2, random.NextDouble() * speed - 2);
             velocities[specialMonster] = velocity;
 
@@ -625,7 +646,21 @@ namespace KW_Shooting
             specialMonsterTimer.Tick += (s, e) => SpecialMonsterTimeout(s, e, specialMonster);
             specialMonsterTimer.Start();
 
-            specialMonsters.Add(new SpecialMonster(specialMonster, specialMonsterTimer));
+            // 색상 변경 타이머 설정
+            Timer colorChangeTimer = new Timer();
+            colorChangeTimer.Interval = 700; // 0.7초 간격으로 이미지 변경
+            colorChangeTimer.Tick += (s, e) =>
+            {
+                var sm = specialMonsters.FirstOrDefault(monster => monster.PictureBox == specialMonster);
+                if (sm != null && sm.CurrentImageIndex < monsterImages.Length)
+                {
+                    sm.PictureBox.Image = monsterImages[sm.CurrentImageIndex];
+                    sm.CurrentImageIndex++;
+                }
+            };
+            colorChangeTimer.Start();
+
+            specialMonsters.Add(new SpecialMonster(specialMonster, specialMonsterTimer, colorChangeTimer));
         }
         private void SpecialMonsterTimeout(object sender, EventArgs e, PictureBox specialMonster)
         {
@@ -641,10 +676,13 @@ namespace KW_Shooting
             if (specialMonsterData != null)
             {
                 specialMonsterData.Timer.Stop();
+                specialMonsterData.ColorChangeTimer.Stop();
                 specialMonsters.Remove(specialMonsterData);
             }
 
         }
+
+
 
         private void SpecialMonster_Click(object sender, EventArgs e)
         {
@@ -667,6 +705,7 @@ namespace KW_Shooting
                 if (specialMonster != null)
                 {
                     specialMonster.Timer.Stop();
+                    specialMonster.ColorChangeTimer.Stop();
                     specialMonsters.Remove(specialMonster);
                 }
 
