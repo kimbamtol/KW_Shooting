@@ -27,6 +27,7 @@ namespace KW_Shooting
         private int speed = 1;
 
         private PictureBox bossMonster;
+        private Location bossMonsterVelocity;
         private Timer bossMonsterTimer;
         private int bossMonsterDuration = 10; // 보스 몬스터 지속 시간
         private int bossMonsterClickCount = 0; // 보스 몬스터 클릭 횟수
@@ -282,6 +283,26 @@ namespace KW_Shooting
                     // 지속적으로 타겟의 Location 변경
                     AdjustVelocityRandomly(target);
                 }
+            }
+
+            // 보스 몬스터 움직임 처리
+            if (bossMonster.Visible)
+            {
+                Point newPosition = new Point(
+                    bossMonster.Location.X + (int)bossMonsterVelocity.X,
+                    bossMonster.Location.Y + (int)bossMonsterVelocity.Y
+                );
+
+                if (newPosition.X < 0 || newPosition.X > ClientSize.Width - bossMonster.Width)
+                {
+                    bossMonsterVelocity.X = -bossMonsterVelocity.X;
+                }
+                if (newPosition.Y < 120 || newPosition.Y > ClientSize.Height - bossMonster.Height)
+                {
+                    bossMonsterVelocity.Y = -bossMonsterVelocity.Y;
+                }
+
+                bossMonster.Location = newPosition;
             }
         }
 
@@ -600,7 +621,7 @@ namespace KW_Shooting
             examTimer.Stop();
 
             // 게임 오버 메시지 표시
-            MessageBox.Show("Game Over");
+            MessageBox.Show($"Game Over!\nYour score is: {score}");
 
             // 게임 종료
             this.Close(); // 폼을 닫아 게임을 종료합니다.
@@ -771,6 +792,9 @@ namespace KW_Shooting
             bossMonster.Location = GetRandomLocation(bossMonster.Size);
             bossMonster.Visible = true;
             bossMonsterClickCount = 0; // 클릭 횟수 초기화
+
+            // 보스 몬스터의 초기 속도와 방향 설정 (빠르게 이동)
+            bossMonsterVelocity = new Location(random.NextDouble() * 20 - 10, random.NextDouble() * 20 - 10);
 
             bossMonsterTimer = new Timer();
             bossMonsterTimer.Interval = 1000; // 1초 간격
