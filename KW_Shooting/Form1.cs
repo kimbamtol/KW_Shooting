@@ -352,6 +352,9 @@ namespace KW_Shooting
             Skill_Timer = new Timer();
             Skill_Timer.Interval = 1000; 
             Skill_Timer.Tick += SkillTimer_Tick;
+            Skill_Timer2 = new Timer();
+            Skill_Timer2.Interval = 1000;
+            Skill_Timer2.Tick += SkillTimer2_Tick;
         }
 
         private void SkillTimer_Tick(object sender, EventArgs e)
@@ -362,11 +365,26 @@ namespace KW_Shooting
             if (remainingTime <= 0)
             {
                 Skill_Timer.Stop();
-                Skill_Left_Time.Text = "0"; 
+                Skill_Left_Time.Text = "0";
             }
             else
             {
                 Skill_Left_Time.Text = remainingTime.ToString();
+            }
+        }
+        private void SkillTimer2_Tick(object sender, EventArgs e)
+        {
+            int remainingTime = int.Parse(Skill_Left_Time.Text);
+            remainingTime--;
+
+            if (remainingTime <= 0)
+            {
+                Skill_Timer2.Stop();
+                Skill_Left_Time2.Text = "0";
+            }
+            else
+            {
+                Skill_Left_Time2.Text = remainingTime.ToString();
             }
         }
 
