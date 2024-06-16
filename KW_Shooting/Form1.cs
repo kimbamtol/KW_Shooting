@@ -220,11 +220,19 @@ namespace KW_Shooting
             if (examDuration <= 0)
             {
                 examTimer.Stop();
-                currentGameState = GameState.Normal;
-                RemainTime = 5; // 일반 라운드로 돌아가면서 타이머 재설정
-                round_txt.Text = $"{Round}";
-                CountDownTimer.Start(); // 일반 라운드 타이머 다시 시작
-                examDuration = 10; // 시험 라운드 지속 시간 재설정
+
+                if (currentGameState == GameState.Final)
+                {
+                    GameOver(); // 기말고사 라운드가 끝나면 게임 종료
+                }
+                else
+                {
+                    currentGameState = GameState.Normal;
+                    RemainTime = 5; // 일반 라운드로 돌아가면서 타이머 재설정
+                    round_txt.Text = $"{Round}";
+                    CountDownTimer.Start(); // 일반 라운드 타이머 다시 시작
+                    examDuration = 10; // 시험 라운드 지속 시간 재설정
+                }
             }
             else
             {
@@ -575,8 +583,17 @@ namespace KW_Shooting
 
         private void GameOver()
         {
-            // 게임 오버 처리 로직 추가
+            // 모든 타이머를 멈춤
+            CountDownTimer.Stop();
+            movementTimer.Stop();
+            WTimer.Stop();
+            examTimer.Stop();
+
+            // 게임 오버 메시지 표시
             MessageBox.Show("Game Over");
+
+            // 게임 종료
+            this.Close(); // 폼을 닫아 게임을 종료합니다.
         }
 
         private void DecreaseLif()
@@ -624,7 +641,7 @@ namespace KW_Shooting
             PictureBox specialMonster = new PictureBox
             {
                 Name = $"SpecialMonster{targets.Count}",
-                Size = new Size(100, 100), 
+                Size = new Size(100, 100),
                 BackColor = Color.Transparent,
                 Image = monsterImages[0], // 회색 책 이미지로 설정
 
