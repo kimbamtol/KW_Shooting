@@ -152,6 +152,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Musics\SkillW.wav" />
+    <Content Include="Resources\Book_2.png" />
+    <Content Include="Resources\s1.png" />
+    <Content Include="Resources\s2.png" />
+    <Content Include="Resources\s3.png" />
+    <Content Include="Resources\s4.png" />
+    <Content Include="Resources\s5.png" />
     <Content Include="Resources\Special.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
