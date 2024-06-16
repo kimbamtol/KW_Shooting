@@ -26,6 +26,12 @@ namespace KW_Shooting
         private int score = 0;
         private int speed = 1;
 
+        private PictureBox bossMonster;
+        private Timer bossMonsterTimer;
+        private int bossMonsterDuration = 10; // 보스 몬스터 지속 시간
+        private int bossMonsterClickCount = 0; // 보스 몬스터 클릭 횟수
+        private const int BossMonsterMaxClicks = 25; // 보스 몬스터 처치에 필요한 클릭 횟수
+
         private Skill currentSkill = Skill.AUTOATTACK;
         private Timer WTimer;
 
@@ -68,8 +74,9 @@ namespace KW_Shooting
             InitializeMovementTimer();
             InitializeCountdownTimer();
             InitializeSkillTimer();
-            InitializeHeart(); // 추가된 코드
-            InitializeExamTimer(); // 추가된 코드
+            InitializeHeart();
+            InitializeExamTimer();
+            InitializeBossMonster(); // 보스 몬스터 초기화
             Movement.Interval = 50; // 타이머 간격을 50ms로 설정
             Movement.Tick += Movement_Tick; // 타이머 이벤트 핸들러
             Movement.Start(); // 타이머 시작 !
@@ -233,6 +240,9 @@ namespace KW_Shooting
                     CountDownTimer.Start(); // 일반 라운드 타이머 다시 시작
                     examDuration = 10; // 시험 라운드 지속 시간 재설정
                 }
+
+                // 보스 몬스터 제거
+                HideBossMonster();
             }
             else
             {
@@ -424,8 +434,8 @@ namespace KW_Shooting
             examTimer.Start();
             round_txt.Text = "중간고사";
 
-            // 중간고사 라운드에 대한 추가 로직 (특별한 몬스터 추가 등)
-            //AddMidMonster();
+            // 보스 몬스터 등장
+            ShowBossMonster();
         }
 
         private void StartFinalExamRound()
@@ -434,8 +444,8 @@ namespace KW_Shooting
             examTimer.Start();
             round_txt.Text = "기말고사";
 
-            // 기말고사 라운드에 대한 추가 로직 (더 강력한 몬스터 추가 등)
-            //AddFinalMonster();
+            // 보스 몬스터 등장
+            ShowBossMonster();
         }
 
         private void InitializeSkillTimer()
@@ -600,6 +610,7 @@ namespace KW_Shooting
         {
             DecreaseLife();
         }
+
         public class SpecialMonster
         {
             public PictureBox PictureBox { get; set; }
@@ -619,21 +630,20 @@ namespace KW_Shooting
         private Image[] monsterImages;
         private int currentImageIndex = 0;
 
-
         private void LoadMonsterImages()
         {
             monsterImages = new Image[]
             {
-
-            Properties.Resources.s1,
-            Properties.Resources.s2,
-            Properties.Resources.s3,
-            Properties.Resources.s4,
-            Properties.Resources.s5
+                Properties.Resources.s1,
+                Properties.Resources.s2,
+                Properties.Resources.s3,
+                Properties.Resources.s4,
+                Properties.Resources.s5
             };
         }
 
         private List<SpecialMonster> specialMonsters = new List<SpecialMonster>();
+
         private void AddSpecialMonster()
         {
             LoadMonsterImages();
@@ -644,7 +654,6 @@ namespace KW_Shooting
                 Size = new Size(100, 100),
                 BackColor = Color.Transparent,
                 Image = monsterImages[0], // 회색 책 이미지로 설정
-
                 SizeMode = PictureBoxSizeMode.StretchImage
             };
             specialMonster.Location = GetRandomLocation(specialMonster.Size);
@@ -664,7 +673,6 @@ namespace KW_Shooting
 
             // 색상 변경 타이머 설정
             Timer colorChangeTimer = new Timer();
-
             colorChangeTimer.Interval = 700; // 0.7초 간격으로 이미지 변경
             colorChangeTimer.Tick += (s, e) =>
             {
@@ -708,8 +716,6 @@ namespace KW_Shooting
             }
         }
 
-
-
         private void SpecialMonster_Click(object sender, EventArgs e)
         {
             PictureBox clickedMonster = sender as PictureBox;
@@ -740,6 +746,78 @@ namespace KW_Shooting
 
                 // 새로 추가(계속 하나씩은 있도록)
                 AddSpecialMonster();
+            }
+        }
+
+        // 보스 몬스터 초기화
+        private void InitializeBossMonster()
+        {
+            bossMonster = new PictureBox
+            {
+                Name = "BossMonster",
+                Size = new Size(300, 300), // 보스 몬스터 크기
+                BackColor = Color.Transparent,
+                Image = Properties.Resources.Book1, // 일반 몬스터와 동일한 이미지 설정
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                Visible = false // 초기에는 보이지 않도록 설정
+            };
+            bossMonster.Click += BossMonster_Click; // 클릭 이벤트 핸들러
+            this.Controls.Add(bossMonster);
+        }
+
+        // 보스 몬스터 등장 메서드
+        private void ShowBossMonster()
+        {
+            bossMonster.Location = GetRandomLocation(bossMonster.Size);
+            bossMonster.Visible = true;
+            bossMonsterClickCount = 0; // 클릭 횟수 초기화
+
+            bossMonsterTimer = new Timer();
+            bossMonsterTimer.Interval = 1000; // 1초 간격
+            bossMonsterTimer.Tick += BossMonsterTimer_Tick;
+            bossMonsterDuration = 10; // 보스 몬스터 지속 시간 초기화
+            bossMonsterTimer.Start();
+        }
+
+        // 보스 몬스터 타이머 이벤트 핸들러
+        private void BossMonsterTimer_Tick(object sender, EventArgs e)
+        {
+            bossMonsterDuration--;
+
+            if (bossMonsterDuration <= 0)
+            {
+                bossMonsterTimer.Stop();
+                bossMonster.Visible = false;
+            }
+        }
+
+        // 보스 몬스터 클릭 이벤트 핸들러
+        private void BossMonster_Click(object sender, EventArgs e)
+        {
+            if (bossMonster.Visible)
+            {
+                bossMonsterClickCount++;
+
+                // Target_Click 메서드를 호출하여 동일한 효과 적용
+                Target_Click(sender, e);
+
+                if (bossMonsterClickCount >= BossMonsterMaxClicks)
+                {
+                    bossMonster.Visible = false;
+                    score += 1000; // 보스 몬스터를 처치하면 1000점 추가
+                    Point.Text = score.ToString();
+                    bossMonsterTimer.Stop();
+                }
+            }
+        }
+
+        // 보스 몬스터 제거 메서드
+        private void HideBossMonster()
+        {
+            if (bossMonster.Visible)
+            {
+                bossMonster.Visible = false;
+                bossMonsterTimer.Stop();
             }
         }
     }
