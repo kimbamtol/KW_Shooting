@@ -26,6 +26,10 @@ namespace KW_Shooting
         private int score = 0;
         private int speed = 1;
 
+        private List<PictureBox> professorMonsters = new List<PictureBox>();
+        private Dictionary<PictureBox, Location> professorVelocities = new Dictionary<PictureBox, Location>();
+        private Timer professorMovementTimer;
+
         private PictureBox bossMonster;
         private Location bossMonsterVelocity;
         private Timer bossMonsterTimer;
@@ -78,6 +82,7 @@ namespace KW_Shooting
             InitializeHeart();
             InitializeExamTimer();
             InitializeBossMonster(); // 보스 몬스터 초기화
+            InitializeProfessorMonsters(); // 교수 몬스터 초기화
             Movement.Interval = 50; // 타이머 간격을 50ms로 설정
             Movement.Tick += Movement_Tick; // 타이머 이벤트 핸들러
             Movement.Start(); // 타이머 시작 !
@@ -244,6 +249,8 @@ namespace KW_Shooting
 
                 // 보스 몬스터 제거
                 HideBossMonster();
+                // 교수 몬스터 제거
+                HideProfessorMonsters();
             }
             else
             {
@@ -303,6 +310,31 @@ namespace KW_Shooting
                 }
 
                 bossMonster.Location = newPosition;
+            }
+
+            // 교수 몬스터 움직임 처리
+            foreach (var professorMonster in professorMonsters)
+            {
+                if (professorMonster.Visible)
+                {
+                    Location velocity = professorVelocities[professorMonster];
+                    Point newPosition = new Point(
+                        professorMonster.Location.X + (int)velocity.X,
+                        professorMonster.Location.Y + (int)velocity.Y
+                    );
+
+                    if (newPosition.X < 0 || newPosition.X > ClientSize.Width - professorMonster.Width)
+                    {
+                        velocity.X = -velocity.X;
+                    }
+                    if (newPosition.Y < 120 || newPosition.Y > ClientSize.Height - professorMonster.Height)
+                    {
+                        velocity.Y = -velocity.Y;
+                    }
+
+                    professorMonster.Location = newPosition;
+                    professorVelocities[professorMonster] = velocity;
+                }
             }
         }
 
@@ -457,6 +489,9 @@ namespace KW_Shooting
 
             // 보스 몬스터 등장
             ShowBossMonster();
+
+            // 교수 몬스터 등장
+            ShowProfessorMonsters();
         }
 
         private void StartFinalExamRound()
@@ -467,6 +502,9 @@ namespace KW_Shooting
 
             // 보스 몬스터 등장
             ShowBossMonster();
+
+            // 교수 몬스터 등장
+            ShowProfessorMonsters();
         }
 
         private void InitializeSkillTimer()
@@ -847,6 +885,90 @@ namespace KW_Shooting
             {
                 bossMonster.Visible = false;
                 bossMonsterTimer.Stop();
+            }
+        }
+
+        // 교수 몬스터 초기화
+        private void InitializeProfessorMonsters()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                PictureBox professorMonster = new PictureBox
+                {
+                    Name = $"ProfessorMonster{i}",
+                    Size = new Size(100, 100), // 교수 몬스터 크기
+                    BackColor = Color.Transparent,
+                    Image = Properties.Resources.Special, // 교수 몬스터 이미지 설정
+                    SizeMode = PictureBoxSizeMode.StretchImage,
+                    Visible = false // 초기에는 보이지 않도록 설정
+                };
+                professorMonster.Click += ProfessorMonster_Click; // 클릭 이벤트 핸들러
+                this.Controls.Add(professorMonster);
+                professorMonsters.Add(professorMonster);
+            }
+        }
+
+        // 교수 몬스터 등장 메서드
+        private void ShowProfessorMonsters()
+        {
+            foreach (var professorMonster in professorMonsters)
+            {
+                professorMonster.Location = GetRandomLocation(professorMonster.Size);
+                professorMonster.Visible = true;
+
+                // 교수 몬스터의 초기 속도와 방향 설정 (빠르게 이동)
+                Location velocity = new Location(random.NextDouble() * 20 - 10, random.NextDouble() * 20 - 10);
+                professorVelocities[professorMonster] = velocity;
+            }
+        }
+
+        // 교수 몬스터 클릭 이벤트 핸들러
+        private void ProfessorMonster_Click(object sender, EventArgs e)
+        {
+            PictureBox clickedProfessorMonster = sender as PictureBox;
+
+            if (clickedProfessorMonster != null && clickedProfessorMonster.Visible)
+            {
+                clickedProfessorMonster.Visible = false;
+                score -= 10; // 교수 몬스터 클릭 시 10점 감점
+                Point.Text = score.ToString();
+
+                // 새로운 교수 몬스터 추가
+                ShowNewProfessorMonster();
+            }
+        }
+
+        // 새로운 교수 몬스터 추가 메서드
+        private void ShowNewProfessorMonster()
+        {
+            PictureBox newProfessorMonster = new PictureBox
+            {
+                Name = $"ProfessorMonster{professorMonsters.Count}",
+                Size = new Size(100, 100), // 교수 몬스터 크기
+                BackColor = Color.Transparent,
+                Image = Properties.Resources.Special, // 교수 몬스터 이미지 설정
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                Visible = true // 보이도록 설정
+            };
+            newProfessorMonster.Location = GetRandomLocation(newProfessorMonster.Size);
+            newProfessorMonster.Click += ProfessorMonster_Click; // 클릭 이벤트 핸들러
+            this.Controls.Add(newProfessorMonster);
+            professorMonsters.Add(newProfessorMonster);
+
+            // 교수 몬스터의 초기 속도와 방향 설정
+            Location velocity = new Location(random.NextDouble() * 20 - 10, random.NextDouble() * 20 - 10);
+            professorVelocities[newProfessorMonster] = velocity;
+        }
+
+        // 교수 몬스터 제거 메서드
+        private void HideProfessorMonsters()
+        {
+            foreach (var professorMonster in professorMonsters)
+            {
+                if (professorMonster.Visible)
+                {
+                    professorMonster.Visible = false;
+                }
             }
         }
     }
