@@ -583,11 +583,6 @@ namespace KW_Shooting
         {
             DecreaseLife();
         }
-<<<<<<< HEAD
-=======
-
-
->>>>>>> baa58a3d48c3d88718f5aef880971e9344c3dce6
         public class SpecialMonster
         {
             public PictureBox PictureBox { get; set; }
@@ -605,28 +600,19 @@ namespace KW_Shooting
         }
 
         private Image[] monsterImages;
-<<<<<<< HEAD
-=======
         private int currentImageIndex = 0;
->>>>>>> baa58a3d48c3d88718f5aef880971e9344c3dce6
+
 
         private void LoadMonsterImages()
         {
             monsterImages = new Image[]
             {
-<<<<<<< HEAD
+
             Properties.Resources.s1,
             Properties.Resources.s2,
             Properties.Resources.s3,
             Properties.Resources.s4,
             Properties.Resources.s5
-=======
-                Properties.Resources.s1,
-                Properties.Resources.s2,
-                Properties.Resources.s3,
-                Properties.Resources.s4,
-                Properties.Resources.s5
->>>>>>> baa58a3d48c3d88718f5aef880971e9344c3dce6
             };
         }
 
@@ -640,11 +626,8 @@ namespace KW_Shooting
                 Name = $"SpecialMonster{targets.Count}",
                 Size = new Size(100, 100), 
                 BackColor = Color.Transparent,
-<<<<<<< HEAD
                 Image = monsterImages[0], // 회색 책 이미지로 설정
-=======
-                Image = monsterImages[0], // 회색의 책으로 설정
->>>>>>> baa58a3d48c3d88718f5aef880971e9344c3dce6
+
                 SizeMode = PictureBoxSizeMode.StretchImage
             };
             specialMonster.Location = GetRandomLocation(specialMonster.Size);
@@ -664,22 +647,7 @@ namespace KW_Shooting
 
             // 색상 변경 타이머 설정
             Timer colorChangeTimer = new Timer();
-<<<<<<< HEAD
-            colorChangeTimer.Interval = 1000; // 1초 간격으로 이미지 변경
-            colorChangeTimer.Tick += (s, e) =>
-            {
-                for (int i = 0; i < specialMonsters.Count; i++)
-                {
-                    if (specialMonsters[i].PictureBox == specialMonster)
-                    {
-                        if (specialMonsters[i].CurrentImageIndex < monsterImages.Length)
-                        {
-                            specialMonsters[i].PictureBox.Image = monsterImages[specialMonsters[i].CurrentImageIndex];
-                            specialMonsters[i].CurrentImageIndex++;
-                        }
-                        break;
-                    }
-=======
+
             colorChangeTimer.Interval = 700; // 0.7초 간격으로 이미지 변경
             colorChangeTimer.Tick += (s, e) =>
             {
@@ -688,7 +656,6 @@ namespace KW_Shooting
                 {
                     sm.PictureBox.Image = monsterImages[sm.CurrentImageIndex];
                     sm.CurrentImageIndex++;
->>>>>>> baa58a3d48c3d88718f5aef880971e9344c3dce6
                 }
             };
             colorChangeTimer.Start();
@@ -708,7 +675,6 @@ namespace KW_Shooting
             // 타이머 정지 및 제거
             for (int i = 0; i < specialMonsters.Count; i++)
             {
-<<<<<<< HEAD
                 if (specialMonsters[i].PictureBox == specialMonster)
                 {
                     specialMonsters[i].Timer.Stop();
@@ -716,11 +682,6 @@ namespace KW_Shooting
                     specialMonsters.RemoveAt(i);
                     break;
                 }
-=======
-                specialMonsterData.Timer.Stop();
-                specialMonsterData.ColorChangeTimer.Stop();
-                specialMonsters.Remove(specialMonsterData);
->>>>>>> baa58a3d48c3d88718f5aef880971e9344c3dce6
             }
         }
 
@@ -745,7 +706,6 @@ namespace KW_Shooting
                 // 타이머 정지 및 제거
                 for (int i = 0; i < specialMonsters.Count; i++)
                 {
-<<<<<<< HEAD
                     if (specialMonsters[i].PictureBox == clickedMonster)
                     {
                         specialMonsters[i].Timer.Stop();
@@ -753,11 +713,6 @@ namespace KW_Shooting
                         specialMonsters.RemoveAt(i);
                         break;
                     }
-=======
-                    specialMonster.Timer.Stop();
-                    specialMonster.ColorChangeTimer.Stop();
-                    specialMonsters.Remove(specialMonster);
->>>>>>> baa58a3d48c3d88718f5aef880971e9344c3dce6
                 }
 
                 // 새로 추가(계속 하나씩은 있도록)
