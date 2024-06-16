@@ -98,7 +98,6 @@ namespace KW_Shooting
             WTimer.Tick += movementStart;
 
             this.KeyDown += new KeyEventHandler(Form1_KeyDown); // 키 이벤트 핸들러 추가
-            this.MouseMove += new MouseEventHandler(Mouse_Move); // 마우스 옆에 스킬 쿨타임 표시
         }
 
         public void Render(object sender, PaintEventArgs e)
@@ -451,18 +450,6 @@ namespace KW_Shooting
             int dx = point2.X - point1.X;
             int dy = point2.Y - point1.Y;
             return Math.Sqrt(dx * dx + dy * dy);
-        }
-
-        private void Mouse_Move(object sender, MouseEventArgs e)
-        {
-            // 마우스 위치에 따라 라벨 위치 업데이트
-            UpdateSkillLabelPosition(e.Location);
-        }
-
-        private void UpdateSkillLabelPosition(Point mousePosition)
-        {
-            int offset = 10; // 마우스 커서에서 라벨까지의 거리
-            Skill_Left_Time.Location = new Point(mousePosition.X + offset, mousePosition.Y + offset);
         }
 
         private void InitializeHeart()
