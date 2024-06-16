@@ -20,10 +20,10 @@ namespace KW_Shooting
         private Dictionary<PictureBox, Location> velocities = new Dictionary<PictureBox, Location>();
         private Random random = new Random();
         private Timer movementTimer;
-        private int RemainTime = 2;
+        private Timer examTimer;
+
+        private int RemainTime = 10;
         private int score = 0;
-
-
         private int speed = 1;
 
         private Skill currentSkill = Skill.AUTOATTACK;
@@ -34,6 +34,20 @@ namespace KW_Shooting
 
         //라운드 변수
         private int Round = 1;
+
+        //게임 상태 관리
+        enum GameState
+        {
+            Normal,
+            Midterm,
+            Final
+        }
+
+        private GameState currentGameState = GameState.Normal;
+
+        // 시험 타이머와 지속 시간 변수
+        private int examDuration = 10; // 시험 라운드 지속 시간 (예: 10초)
+
         // <summary>
         // 김태훈
         List<object> objects = new List<object>();
@@ -55,9 +69,13 @@ namespace KW_Shooting
             InitializeCountdownTimer();
             InitializeSkillTimer();
             InitializeHeart(); // 추가된 코드
+            InitializeExamTimer(); // 추가된 코드
             Movement.Interval = 50; // 타이머 간격을 50ms로 설정
             Movement.Tick += Movement_Tick; // 타이머 이벤트 핸들러
             Movement.Start(); // 타이머 시작 !
+
+            round_txt.Text = "1"; // 초기 라운드를 1로 설정
+            RemainTime = 3; // 초기 남은 시간을 30초로 설정
 
             this.DoubleBuffered = true;
 
@@ -188,6 +206,33 @@ namespace KW_Shooting
             return new Point(random.Next(maxX), random.Next(minY, maxY));
         }
 
+        private void InitializeExamTimer()
+        {
+            examTimer = new Timer();
+            examTimer.Interval = 1000; // 1초 간격
+            examTimer.Tick += ExamTimer_Tick;
+        }
+
+        private void ExamTimer_Tick(object sender, EventArgs e)
+        {
+            examDuration--;
+
+            if (examDuration <= 0)
+            {
+                examTimer.Stop();
+                currentGameState = GameState.Normal;
+                RemainTime = 5; // 일반 라운드로 돌아가면서 타이머 재설정
+                round_txt.Text = $"{Round}";
+                CountDownTimer.Start(); // 일반 라운드 타이머 다시 시작
+                examDuration = 10; // 시험 라운드 지속 시간 재설정
+            }
+            else
+            {
+                RemainTime = examDuration;
+                Time.Text = RemainTime.ToString();
+            }
+        }
+
         private void Movement_Tick(object sender, EventArgs e)
         {
             foreach (var target in targets)
@@ -235,7 +280,7 @@ namespace KW_Shooting
                     gun.AutoAttack();
                     break;
                 case Skill.SKILL_Q:
-                    gun.SkillQ(); 
+                    gun.SkillQ();
                     break;
             }
         }
@@ -243,7 +288,7 @@ namespace KW_Shooting
         {
             PictureBox clickedTarget = sender as PictureBox;
 
-            if(currentSkill == Skill.AUTOATTACK)
+            if (currentSkill == Skill.AUTOATTACK)
             {
                 gun.Position = TargetCenterPos(clickedTarget);
                 SkillPlay();
@@ -332,24 +377,63 @@ namespace KW_Shooting
             if (RemainTime <= 0)
             {
                 CountDownTimer.Stop(); // 타이머를 멈춤
+
                 Round++; // 라운드 증가
                 round_txt.Text = Round.ToString(); // 라벨 값 갱신
-                RemainTime = 2; // 타이머 재설정
+                RemainTime = 5; // 타이머 재설정
                 CountDownTimer.Start(); // 타이머 다시 시작
 
                 if (Round % 3 == 0)
                 {
                     speed += 5; // 스페셜 타겟의 속도를 3라운드마다 5씩 증가
-                   AddSpecialMonster();
+                    AddSpecialMonster();
+
+                    round_txt.Text = $"{Round}"; // 라벨 값 갱신
+                    RemainTime = 30; // 타이머 재설정
+                }
+                if (Round % 6 == 0)
+                {
+                    currentGameState = GameState.Final;
+                    StartFinalExamRound(); // 기말고사 라운드 시작
+                }
+                else if (Round % 3 == 0)
+                {
+                    currentGameState = GameState.Midterm;
+                    StartMidtermRound(); // 중간고사 라운드 시작
+                }
+                else
+                {
+                    CountDownTimer.Start(); // 일반 라운드 타이머 다시 시작
+
                 }
             }
             Time.Text = RemainTime.ToString();
         }
 
+        private void StartMidtermRound()
+        {
+            // 중간고사 라운드 타이머 시작
+            examTimer.Start();
+            round_txt.Text = "중간고사";
+
+            // 중간고사 라운드에 대한 추가 로직 (특별한 몬스터 추가 등)
+            //AddMidMonster();
+        }
+
+        private void StartFinalExamRound()
+        {
+            // 기말고사 라운드 타이머 시작
+            examTimer.Start();
+            round_txt.Text = "기말고사";
+
+            // 기말고사 라운드에 대한 추가 로직 (더 강력한 몬스터 추가 등)
+            //AddFinalMonster();
+        }
+
         private void InitializeSkillTimer()
         {
             Skill_Timer = new Timer();
-            Skill_Timer.Interval = 1000; 
+            Skill_Timer.Interval = 1000;
             Skill_Timer.Tick += SkillTimer_Tick;
         }
 
@@ -361,7 +445,7 @@ namespace KW_Shooting
             if (remainingTime <= 0)
             {
                 Skill_Timer.Stop();
-                Skill_Left_Time.Text = "0"; 
+                Skill_Left_Time.Text = "0";
             }
             else
             {
@@ -397,9 +481,9 @@ namespace KW_Shooting
         // 스킬 발동 메서드
         private void ActivateSkill()
         {
-            int clickRadius = 200; 
+            int clickRadius = 200; // 클릭 반경 . 우선은 200 나중에 100*x(스킬 레벨업으로 설정)
 
-            
+            // 마우스 클릭 위치
             Point clickPosition = Cursor.Position;
             clickPosition = PointToClient(clickPosition);
 
@@ -419,7 +503,7 @@ namespace KW_Shooting
                     // 타겟이 클릭 반경 내에 있고 보이는 상태인 경우 클릭 처리
                     Target_Click(target, EventArgs.Empty);
                 }
-               
+                //큰 이펙트 하나 추가가 되면 좋을 듯
             }
             // 스킬 쿨타임 타이머 시작
             Skill_Timer.Start();
@@ -447,7 +531,7 @@ namespace KW_Shooting
         private double DistanceBetweenPoints(Point point1, Point point2)
         {
             int dx = point2.X - point1.X;
-            int dy = point2.Y - point1.Y;
+            int dy = point2.Y - point2.Y;
             return Math.Sqrt(dx * dx + dy * dy);
         }
 
@@ -492,6 +576,10 @@ namespace KW_Shooting
             MessageBox.Show("Game Over");
         }
 
+        private void DecreaseLif()
+        {
+            DecreaseLife();
+        }
         public class SpecialMonster
         {
             public PictureBox PictureBox { get; set; }
@@ -509,41 +597,38 @@ namespace KW_Shooting
         }
 
         private Image[] monsterImages;
-        private int currentImageIndex = 0;
 
         private void LoadMonsterImages()
         {
             monsterImages = new Image[]
             {
-                Properties.Resources.s1,
-                Properties.Resources.s2,
-                Properties.Resources.s3,
-                Properties.Resources.s4,
-                Properties.Resources.s5
+            Properties.Resources.s1,
+            Properties.Resources.s2,
+            Properties.Resources.s3,
+            Properties.Resources.s4,
+            Properties.Resources.s5
             };
         }
 
         private List<SpecialMonster> specialMonsters = new List<SpecialMonster>();
         private void AddSpecialMonster()
         {
-            // 이미지를 로드합니다.
             LoadMonsterImages();
 
-            // 특별한 몬스터를 생성하고 설정
             PictureBox specialMonster = new PictureBox
             {
                 Name = $"SpecialMonster{targets.Count}",
-                Size = new Size(100, 100),
+                Size = new Size(150, 150), // 크기는 좀 더 작게?...
                 BackColor = Color.Transparent,
-                Image = monsterImages[0], // 회색의 책으로 설정
+                Image = monsterImages[0], // 회색 책 이미지로 설정
                 SizeMode = PictureBoxSizeMode.StretchImage
             };
             specialMonster.Location = GetRandomLocation(specialMonster.Size);
-            specialMonster.Click += SpecialMonster_Click;
+            specialMonster.Click += Target_Click;
             this.Controls.Add(specialMonster);
             targets.Add(specialMonster);
 
-            // 속도 설정
+            // 속도는 초반에 느리다가 점점 빨라지도록
             Location velocity = new Location(random.NextDouble() * speed - 2, random.NextDouble() * speed - 2);
             velocities[specialMonster] = velocity;
 
@@ -555,7 +640,7 @@ namespace KW_Shooting
 
             // 색상 변경 타이머 설정
             Timer colorChangeTimer = new Timer();
-            colorChangeTimer.Interval = 700; // 0.7초 간격으로 이미지 변경
+            colorChangeTimer.Interval = 1000; // 1초 간격으로 이미지 변경
             colorChangeTimer.Tick += (s, e) =>
             {
                 for (int i = 0; i < specialMonsters.Count; i++)
@@ -575,8 +660,6 @@ namespace KW_Shooting
 
             specialMonsters.Add(new SpecialMonster(specialMonster, specialMonsterTimer, colorChangeTimer));
         }
-
-
 
         private void SpecialMonsterTimeout(object sender, EventArgs e, PictureBox specialMonster)
         {
@@ -599,7 +682,6 @@ namespace KW_Shooting
                 }
             }
         }
-
 
         private void SpecialMonster_Click(object sender, EventArgs e)
         {
@@ -633,7 +715,5 @@ namespace KW_Shooting
                 AddSpecialMonster();
             }
         }
-
-
     }
 }
